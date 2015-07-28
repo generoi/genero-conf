@@ -1,0 +1,25 @@
+SHELL := /bin/bash
+
+# The remote environment hosts.
+STAGING_HOST    ?= <company>
+PRODUCTION_HOST ?= <project>.fi
+
+STAGING_DB_NAME ?= <project>_stage
+STAGING_DB_USER ?= <project>_stage
+STAGING_DB_PASS ?= <project>_stage
+
+include lib/genero-conf/make/shared.mk
+include lib/genero-conf/make/vm.mk
+include lib/genero-conf/make/dev.mk
+include lib/genero-conf/make/staging.mk
+include lib/genero-conf/make/production.mk
+include lib/genero-conf/make/git-helpers.mk
+include lib/genero-conf/make/rsync.mk
+
+all: check
+
+# Sanity checks
+check: vm-check dev-check staging-check rsync-check
+
+# Main task (everything is atomic).
+install: vm-update vm-install vm-ssh-copy-id dev-install staging-ssh-copy-id rsync staging-mysql-settings info
