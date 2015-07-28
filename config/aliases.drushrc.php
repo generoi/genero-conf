@@ -6,11 +6,11 @@ define('CONF_DEV_USER', 'vagrant');
 
 define('CONF_STAGING_URI', '<project>.staging.<company>.fi');
 define('CONF_STAGING_ROOT', '/var/www/staging/<project>/current');
-define('CONF_STAGING_HOST', '<company>.fi');
+define('CONF_STAGING_HOST', '<company>');
 define('CONF_STAGING_USER', 'deploy');
 
 define('CONF_PRODUCTION_URI', '<project>.fi');
-define('CONF_PRODUCTION_ROOT', '/var/www/<project>/deploy/current');
+define('CONF_PRODUCTION_ROOT', '/home/www/<project>/deploy/current');
 define('CONF_PRODUCTION_HOST', '<project>.fi');
 define('CONF_PRODUCTION_USER', 'deploy');
 define('CONF_ADMIN_PASSWORD', 'admin');

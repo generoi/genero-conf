@@ -8,7 +8,7 @@ vagrant_user: vagrant
 # If you need to run multiple instances of Drupal VM, set a unique hostname,
 # machine name, and IP address for each instance.
 vagrant_hostname: <project>.dev
-vagrant_machine_name: <project>
+vagrant_machine_name: <project>dev
 vagrant_ip: 192.168.88.87
 
 # A list of synced folders, with the keys 'local_path', 'destination', 'id', and
