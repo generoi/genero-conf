@@ -1,0 +1,29 @@
+# Sass
+.sass-cache
+sites/all/themes/**/*/css
+config.rb
+
+# Drupal
+sites/default/settings.local.php
+sites/default/files
+
+# Third party
+node_modules
+sites/all/themes/**/*/bower_components
+
+# Other
+tags
+.AppleDouble
+cache
+backup
+*.sql
+
+# Vagrant
+.vagrant
+vm/config.yml
+vm/drupal.make.yml
+vm/.vagrant
+
+# Sublime files
+*.sublime-project
+*.sublime-workspace

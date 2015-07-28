@@ -1,0 +1,29 @@
+{
+  "passfail": false,
+  "jquery": true,
+  "predef": [
+    "google",
+    "Drupal",
+    "_gaq",
+    "CKEDITOR",
+    "FB"
+  ],
+  "node": true,
+  "browser": true,
+  "curly": false,
+  "eqeqeq": true,
+  "forin": true,
+  "immed": true,
+  "latedef": false,
+  "newcap": true,
+  "noarg": true,
+  "noempty": true,
+  "nonew": false,
+  "regexp": true,
+  "undef": true,
+  "trailing": true,
+  "sub": true,
+  "boss": true,
+  "eqnull": true,
+  "laxcomma": true
+}
