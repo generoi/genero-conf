@@ -42,8 +42,7 @@ set :assets_compile,          "gulp build --production"
 set :assets_output,           %w[sites/all/themes/<THEME>/css sites/all/themes/<THEME>/bower_components]
 
 namespace :deploy do
-  # Required by capistrano
-  task :restart do end
+  after :restart, :cache_clear do end
 
   after :finishing, :drupal_online do
     invoke "drush:site_offline"
