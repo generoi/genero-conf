@@ -15,6 +15,7 @@ include lib/genero-conf/make/staging.mk
 include lib/genero-conf/make/production.mk
 include lib/genero-conf/make/git-helpers.mk
 include lib/genero-conf/make/rsync.mk
+include lib/genero-conf/make/extras.mk
 
 all: check
 
