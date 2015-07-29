@@ -55,4 +55,4 @@ $staging_enable = array();
 $staging_disable = $dev_enable + $dev_disable;
 
 // Include the shared aliases logic.
-include_once __DIR__ . '/../lib/genero-conf/drush/aliases.drushrc.php';
+include __DIR__ . '/../lib/genero-conf/drush/aliases.drushrc.php';
