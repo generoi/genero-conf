@@ -1,6 +1,6 @@
 # Sass
 .sass-cache
-sites/all/themes/**/*/css
+sites/all/themes/<theme>/css
 config.rb
 
 # Drupal
@@ -9,7 +9,7 @@ sites/default/files
 
 # Third party
 node_modules
-sites/all/themes/**/*/bower_components
+sites/all/themes/<theme>/bower_components
 
 # Other
 tags
