@@ -13,15 +13,22 @@ production-install: production-check
 
 production-ssh-copy-id: production-check
 	@echo -e "${CSTART} Copy your public key to the deploy user on the production environment: ${PRODUCTION_HOST} ${CEND}"
-	@u=$$(read -p "User login for ${STAGING_HOST}: " usr; echo $$usr); \
+	@echo -e "${CSTART} This assumes you have access to the host from the staging environment. ${CEND}"
+	@u=$$(read -p "Your personal user login for ${STAGING_HOST}: " usr; echo $$usr); \
 	access="$$(ssh -o PasswordAuthentication=no -o ConnectTimeout=15 -o "ProxyCommand ssh $$u@${STAGING_HOST} nc %h %p" deploy@${PRODUCTION_HOST} echo ok 2>&1)"; \
 	if [[ ! "$$access" =~ "ok" ]]; then \
 		k="$$(cat ~/.ssh/id_rsa.pub)"; \
 		ssh -t $$u@${STAGING_HOST} " \
-			ssh-add -l && ssh -t deploy@${PRODUCTION_HOST} \" \
-				grep -qe \\\"$$k\\\" /home/deploy/.ssh/authorized_keys \
-				|| echo \\\"$$k\\\" >> /home/deploy/.ssh/authorized_keys\""; \
-		echo "Your key was added."; \
+			ssh -t deploy@${PRODUCTION_HOST} \" \
+				k=\\\"$$k\\\"; \
+				if ! grep -qe \\\"\\\$$k\\\" /home/deploy/.ssh/authorized_keys; then \
+					echo \\\"\\\$$k\\\" >> /home/deploy/.ssh/authorized_keys; \
+					echo \\\"Your key was added\\\"; \
+				else \
+					echo \\\"Your key already exists\\\"; \
+				fi \
+			\" \
+		"; \
 	else \
 		echo "Your key is already present."; \
 	fi; \

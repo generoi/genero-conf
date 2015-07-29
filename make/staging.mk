@@ -28,9 +28,15 @@ staging-ssh-copy-id: staging-check
 		k="$$(cat ~/.ssh/id_rsa.pub)"; \
 		ssh -t $$u@${STAGING_HOST} " \
 			sudo su - deploy -c \" \
-				grep -qe \\\"$$k\\\" /home/deploy/.ssh/authorized_keys \
-				|| echo \\\"$$k\\\" >> /home/deploy/.ssh/authorized_keys\""; \
-		echo "Your key was added."; \
+				k=\\\"$$k\\\"; \
+				if ! grep -qe \\\"\\\$$k\\\" /home/deploy/.ssh/authorized_keys; then \
+					echo \\\"\\\$$k\\\" >> /home/deploy/.ssh/authorized_keys; \
+					echo \\\"Your key was added\\\"; \
+				else \
+					echo \\\"Your key already exists\\\"; \
+				fi \
+			\" \
+		"; \
 	else \
 		echo "Your key is already present."; \
 	fi
