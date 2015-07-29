@@ -22,8 +22,12 @@ VAGRANT-exists:  ; @which vagrant > /dev/null
 vm-check: ANSIBLE-exists VAGRANT-exists SED-version LOCAL-env
 
 vm-install: vm-check
+	@echo -e "${CSTART} Restart services if vagrant is already running ${CEND}"
+	vagrant status | grep -qe 'running' && (vagrant ssh -c 'sudo service mysql restart; sudo service apache restart')
 	@echo -e "${CSTART} Start and provision the vagrant environment ${CEND}"
 	vagrant up --provision && vagrant provision
+	@echo -e "${CSTART} Disable default apache vhost ${CEND}"
+	vagrant ssh -c 'sudo a2dissite 000-default; sudo service apache reload'
 	@echo -e "${CSTART} Configure settings.local.php ${CEND}"
 	vagrant ssh -c '\
 		chmod 775 ${DRUPAL_ROOT}/sites/default;\
