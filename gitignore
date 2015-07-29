@@ -20,9 +20,7 @@ backup
 
 # Vagrant
 .vagrant
-vm/config.yml
-vm/drupal.make.yml
-vm/.vagrant
+vm
 
 # Sublime files
 *.sublime-project
