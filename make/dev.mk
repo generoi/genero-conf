@@ -26,7 +26,7 @@ dev-check: VAGRANT-exists COMPOSER-exists DRUSH-exists DRUSH-version
 
 dev-install: dev-dependencies-install dev-check
 	@echo -e "${CSTART} Install git hooks ${CEND}"
-	[ -f git-hooks/install.sh ] && git-hooks/install.sh
+	[ -f lib/git-hooks/install.sh ] && lib/git-hooks/install.sh || true
 	vagrant ssh -c 'cd ${DRUPAL_ROOT}; make dev-dependencies-install'
 	@echo -e "${CSTART} Install dotfiles ${CEND}"
 	vagrant ssh -c '[ ! -d dotfiles ] && git clone ${DOTFILES_URL} dotfiles; cd dotfiles; ./bootstrap.sh'
