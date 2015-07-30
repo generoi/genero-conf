@@ -3,6 +3,7 @@
 $base_options = array(
   'path-aliases' => array(
     '%dump-dir' => '/tmp',
+    '%dump' => '/tmp/dump.sql',
     '%files' => 'sites/default/files',
   ),
   'command-specific' => array(
