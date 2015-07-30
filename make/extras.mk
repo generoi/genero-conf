@@ -19,11 +19,11 @@ ngrok:
 drupal-permissions:
 	@echo -e "${CSTART} Make sure the file permissions are correct ${CEND}"
 	[ -f sites/default/settings.php ]
-	chmod --changes 755 .
+	sudo chmod --changes 755 .
 	sudo chown --changes ${PERMISSIONS_USER}:${PERMISSIONS_GROUP} .
 	find . \( -not -user ${PERMISSIONS_USER} -o -not -group ${PERMISSIONS_USER} \) -not -path "./sites/default/files*" -exec sudo chown -v ${PERMISSIONS_USER}:${PERMISSIONS_GROUP} "{}" \;
-	find . -type f -not -path "./sites/default/files*" -not -perm 644 -exec chmod -v 644 "{}" \;
-	find . -type d -not -path "./sites/default/files*" -not -perm 755 -exec chmod -v 755 "{}" \;
+	find . -type f -not -path "./sites/default/files*" -not -perm 644 -exec sudo chmod -v 644 "{}" \;
+	find . -type d -not -path "./sites/default/files*" -not -perm 755 -exec sudo chmod -v 755 "{}" \;
 	mkdir -pv sites/default/files
 	sudo chown --changes ${PERMISSIONS_USER}:${PERMISSIONS_WEBSERVER} sites/default/files
 	sudo chmod 2775 --changes sites/default/files
@@ -34,7 +34,7 @@ drupal-permissions:
 	find sites/default/files/ -type d -not -perm 2775 -exec sudo chmod -v 2775 "{}" \;
 
 drupal-permissions-cap:
-	PERMISSIONS_GROUP=deploy PERMISSIONS_GROUP=deploy PERMISSIONS_WEBSERVER=www-data make drupal-permissions
+	PERMISSIONS_USER=deploy PERMISSIONS_GROUP=deploy PERMISSIONS_WEBSERVER=www-data make drupal-permissions
 
 # If you want to install the dependencies.
 install-dep-osx: BREW-exists

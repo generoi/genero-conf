@@ -14,6 +14,13 @@ staging-install: staging-check staging-ssh-copy-id
 	cap staging setup
 	@echo -e "${CSTART} Make an initial deployment (will partly fail) ${CEND}"
 	-cap staging deploy
+	@echo -e "${CSTART} Transfer your local htaccess file to staging ${CEND}"
+	-cat .htaccess | drush @staging ssh 'cat - > ${STAGING_ROOT}/shared/.htaccess'
+	@echo -e "${CSTART} Fix file permissions ${CEND}"
+	@u=$$(read -p "User login for ${STAGING_HOST} (the password prompted is for sudo on ${STAGING_HOST}): " usr; echo $$usr); \
+		ssh -t $$u@${STAGING_HOST} " \
+			cd ${STAGING_ROOT}/current; make drupal-permissions-cap; \
+		";
 	@echo
 	@echo -e "\n-----------------------------------------------------------------------------------"
 	@echo -e "NOTE: To import a database you can use: drush sql-sync @production @staging"

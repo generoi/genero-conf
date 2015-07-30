@@ -4,6 +4,8 @@ SHELL := /bin/bash
 STAGING_HOST    ?= <company>
 PRODUCTION_HOST ?= <project>.fi
 
+STAGING_ROOT    ?= /var/www/staging/<project>
+
 STAGING_DB_NAME ?= <project>_stage
 STAGING_DB_USER ?= <project>_stage
 STAGING_DB_PASS ?= <project>_stage
