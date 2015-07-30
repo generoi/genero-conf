@@ -4,6 +4,10 @@ WEINRE_HOST ?= -all-
 WEINRE_PORT ?= 9090
 NGROK_PORT ?= 80
 
+PERMISSIONS_USER      ?= vagrant
+PERMISSIONS_GROUP     ?= vagrant
+PERMISSIONS_WEBSERVER ?= www-data
+
 BREW-exists:     ; @which brew > /dev/null
 
 weinre:
@@ -16,18 +20,21 @@ drupal-permissions:
 	@echo -e "${CSTART} Make sure the file permissions are correct ${CEND}"
 	[ -f sites/default/settings.php ]
 	chmod --changes 755 .
-	sudo chown --changes vagrant:vagrant .
-	find . \( -not -user vagrant -o -not -group vagrant \) -not -path "./sites/default/files*" -exec sudo chown -v vagrant:vagrant "{}" \;
+	sudo chown --changes ${PERMISSIONS_USER}:${PERMISSIONS_GROUP} .
+	find . \( -not -user ${PERMISSIONS_USER} -o -not -group ${PERMISSIONS_USER} \) -not -path "./sites/default/files*" -exec sudo chown -v ${PERMISSIONS_USER}:${PERMISSIONS_GROUP} "{}" \;
 	find . -type f -not -path "./sites/default/files*" -not -perm 644 -exec chmod -v 644 "{}" \;
 	find . -type d -not -path "./sites/default/files*" -not -perm 755 -exec chmod -v 755 "{}" \;
 	mkdir -pv sites/default/files
-	sudo chown --changes vagrant:www-data sites/default/files
+	sudo chown --changes ${PERMISSIONS_USER}:${PERMISSIONS_WEBSERVER} sites/default/files
 	sudo chmod 2775 --changes sites/default/files
-	sudo chown --changes vagrant:vagrant sites/default/settings.*php
+	sudo chown --changes ${PERMISSIONS_USER}:${PERMISSIONS_GROUP} sites/default/settings.*php
 	sudo chmod 644 --changes sites/default/settings.*php
-	find sites/default/files/ \( -not -user vagrant -o -not -group www-data \) -exec sudo chown vagrant:www-data "{}" \;
+	find sites/default/files/ \( -not -user ${PERMISSIONS_USER} -o -not -group ${PERMISSIONS_WEBSERVER} \) -exec sudo chown ${PERMISSIONS_USER}:${PERMISSIONS_WEBSERVER} "{}" \;
 	find sites/default/files/ -type f -not -perm 0664 -exec sudo chmod -v 0664 "{}" \;
 	find sites/default/files/ -type d -not -perm 2775 -exec sudo chmod -v 2775 "{}" \;
+
+drupal-permissions-cap:
+	PERMISSIONS_GROUP=deploy PERMISSIONS_GROUP=deploy PERMISSIONS_WEBSERVER=www-data make drupal-permissions
 
 # If you want to install the dependencies.
 install-dep-osx: BREW-exists
