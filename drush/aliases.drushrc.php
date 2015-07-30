@@ -12,7 +12,8 @@ $base_options = array(
     ),
     'core-rsync' => array(
       'verbose' => TRUE,
-      'mode' => 'rlpgoz',
+      'mode' => 'rlpzO',
+      'no-perms' => TRUE,
       'exclude-paths' => implode(':', $rsync_exclude),
     ),
   ),
