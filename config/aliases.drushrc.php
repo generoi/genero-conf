@@ -4,19 +4,19 @@ define('CONF_DEV_URI', '<project>.dev');
 define('CONF_DEV_ROOT', '/var/www/drupal');
 define('CONF_DEV_USER', 'vagrant');
 
-define('CONF_STAGING_URI', '<project>.staging.<company>.fi');
+define('CONF_STAGING_URI', '<project>.staging.minasanor.genero.fi');
 define('CONF_STAGING_ROOT', '/var/www/staging/<project>/current');
-define('CONF_STAGING_HOST', '<company>');
+define('CONF_STAGING_HOST', 'minasanor.genero.fi');
 define('CONF_STAGING_USER', 'deploy');
 
-define('CONF_PRODUCTION_URI', '<project>.fi');
-define('CONF_PRODUCTION_ROOT', '/home/www/<project>/deploy/current');
-define('CONF_PRODUCTION_HOST', '<project>.fi');
+define('CONF_PRODUCTION_URI', '<host>');
+define('CONF_PRODUCTION_ROOT', '/var/www/<project>/current');
+define('CONF_PRODUCTION_HOST', '<host>');
 define('CONF_PRODUCTION_USER', 'deploy');
 define('CONF_ADMIN_PASSWORD', 'admin');
 
 exec("hostname", $output);
-$is_staging = ($output[0] == '<company>');
+$is_staging = ($output[0] == 'minasanor');
 exec("whoami", $output);
 $is_vagrant = ($output[0] == 'vagrant');
 

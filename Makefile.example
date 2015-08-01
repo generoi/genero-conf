@@ -1,8 +1,8 @@
 SHELL := /bin/bash
 
 # The remote environment hosts.
-STAGING_HOST    ?= <company>
-PRODUCTION_HOST ?= <project>.fi
+STAGING_HOST    ?= minasanor.genero.fi
+PRODUCTION_HOST ?= <host>
 
 STAGING_ROOT    ?= /var/www/staging/<project>
 
@@ -25,4 +25,4 @@ all: check
 check: vm-check dev-check staging-check rsync-check
 
 # Main task (everything is atomic).
-install: check vm-update vm-install vm-ssh-copy-id dev-install staging-ssh-copy-id rsync staging-mysql-settings info
+install: check vm-update vm-install vm-ssh-copy-id dev-install staging-ssh-copy-id production-ssh-copy-id rsync staging-mysql-settings info

@@ -39,7 +39,7 @@ set :varnish_address,         "127.0.0.1:6082"
 set :varnish_ban_pattern,     "req.url ~ ^/"
 
 set :assets_compile,          "gulp build --production"
-set :assets_output,           %w[sites/all/themes/<THEME>/css sites/all/themes/<THEME>/bower_components]
+set :assets_output,           %w[sites/all/themes/<theme>/css sites/all/themes/<theme>/bower_components]
 
 namespace :deploy do
   after :restart, :cache_clear do end

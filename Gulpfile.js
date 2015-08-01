@@ -22,7 +22,7 @@ var gulp = require('gulp')
 
 var config = {
     cssDir: 'css'
-  , themeDir: 'sites/all/themes/<THEME>'
+  , themeDir: 'sites/all/themes/<theme>'
   , modulesDir: 'sites/all/modules/custom'
   , production: !!util.env.production
   , sourceMaps: !util.env.production

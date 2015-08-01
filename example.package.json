@@ -2,7 +2,7 @@
   "name": "<project>",
   "description": "<project>",
   "version": "1.0.0",
-  "homepage": "http://www.<project>.fi",
+  "homepage": "https://github.com/generoi/<project>",
   "repository": {
     "type": "git",
     "url": "git@github.com:generoi/<project>.git"
