@@ -23,9 +23,13 @@ vagrant_synced_folders:
     type: rsync
     create: true
     excluded_paths: ['.git/', 'node_modules/', 'sites/default/files/']
-
-vagrant_forwarded_ports: []
-  #  - { guest: 35729, host: 35729, protocol: tcp }
+    rsync_args: [
+      "--verbose", "--archive", "--delete",
+      "--chmod=Du=rwx,Dgo=rx,Fu=rw,Fgo=r", # 644 for files, 755 for directories
+      "--numeric-ids", # performance tuning
+      "--owner", "--group", # required for the following command
+      "--usermap=*:900", "--groupmap=*:900", # chown everything to vagrant:vagrant
+    ]
 
 # Memory and CPU to use for this VM.
 vagrant_memory: 1024

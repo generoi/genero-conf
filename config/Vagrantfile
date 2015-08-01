@@ -63,13 +63,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       type: synced_folder['type'],
       rsync__auto: "true",
       rsync__exclude: synced_folder['excluded_paths'],
-      rsync__args: [
-        "--verbose", "--archive", "--delete",
-        "--chmod=Du=rwx,Dgo=rx,Fu=rw,Fgo=r", # 644 for files, 755 for directories
-        "--numeric-ids", # performance tuning
-        "--owner", "--group", # required for the following command
-        "--usermap=*:900", "--groupmap=*:900", # chown everything to vagrant:vagrant
-      ],
+      rsync__args: synced_folder.include?('rsync_args') ? synced_folder['rsync_args'] :
+        ["--verbose", "--archive", "--delete", "-z", "--chmod=ugo=rwX"],
       rsync__chown: false,
       rsync__verbose: true,
       id: synced_folder['id'],
