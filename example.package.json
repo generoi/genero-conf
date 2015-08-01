@@ -11,8 +11,10 @@
     "Oskar Schöldström <oskar@genero.fi>",
     "Christoffer Björkskog <christoffer@genero.fi>",
     "Marcus Aschan <marcus@genero.fi>",
-    "Axel Wiklund <axel@genero.fi>"
+    "Axel Wiklund <axel@genero.fi>",
+    "Petter West <petter@genero.fi>"
   ],
+  "license": "UNLICENSED",
   "scripts": {
     "test": "gulp lint --production"
   },

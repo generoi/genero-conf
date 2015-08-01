@@ -4,8 +4,9 @@ sites/all/themes/<theme>/css
 config.rb
 
 # Drupal
-sites/default/settings.local.php
-sites/default/files
+sites/*/settings.local.php
+sites/*/files
+sites/*/private
 
 # Third party
 node_modules
@@ -14,6 +15,7 @@ sites/all/themes/<theme>/bower_components
 # Other
 tags
 .AppleDouble
+.DS_Store
 cache
 backup
 *.sql

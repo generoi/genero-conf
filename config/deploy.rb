@@ -52,7 +52,7 @@ namespace :deploy do
     invoke "cache:all"
     invoke "drush:updatedb"
     invoke "drush:site_online"
-    invoke "cache:varnish" if fetch(:stage) == :production
+    # invoke "cache:varnish" if fetch(:stage) == :production
   end
 
   after :rollback, 'cache'

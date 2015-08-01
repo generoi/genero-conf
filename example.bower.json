@@ -6,7 +6,8 @@
     "Oskar Schöldström <oskar@genero.fi>",
     "Christoffer Björkskog <christoffer@genero.fi>",
     "Marcus Aschan <marcus@genero.fi>",
-    "Axel Wiklund <axel@genero.fi>"
+    "Axel Wiklund <axel@genero.fi>",
+    "Petter West <petter@genero.fi>"
   ],
   "description": "<project>",
   "license": "UNLICENSED",
@@ -19,7 +20,6 @@
     "tests"
   ],
   "dependencies": {
-    "jQuery-menu-aim": "git@github.com:kamens/jQuery-menu-aim.git",
     "jquery-scrolldepth": "git@github.com:robflaherty/jquery-scrolldepth.git#master",
     "console-polyfill": "~0.1.2",
     "jquery-touchswipe": "~1.6.9"

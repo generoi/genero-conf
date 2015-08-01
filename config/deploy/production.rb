@@ -4,7 +4,7 @@ require 'net/ssh/proxy/command'
 set :stage, :production
 
 set :app_url,       "http://www.<host>"
-set :deploy_to,     "/var/www/<project>/deploy"
+set :deploy_to,     "/var/www/<project>"
 
 # Simple Role Syntax
 # ==================
