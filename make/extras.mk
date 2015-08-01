@@ -30,8 +30,9 @@ drupal-permissions:
 	sudo chown --changes ${PERMISSIONS_USER}:${PERMISSIONS_GROUP} sites/default/settings.*php
 	sudo chmod 644 --changes sites/default/settings.*php
 	find sites/default/files/ \( -not -user ${PERMISSIONS_USER} -o -not -group ${PERMISSIONS_WEBSERVER} \) -exec sudo chown ${PERMISSIONS_USER}:${PERMISSIONS_WEBSERVER} "{}" \;
-	find sites/default/files/ -type f -not -perm 0664 -exec sudo chmod -v 0664 "{}" \;
+	find sites/default/files/ -not -name '.htaccess' -type f -not -perm 0664 -exec sudo chmod -v 0664 "{}" \;
 	find sites/default/files/ -type d -not -perm 2775 -exec sudo chmod -v 2775 "{}" \;
+	find sites/default/files/ -name '.htaccess' -type f -not -perm 0444 -exec sudo chmod -v 0444 "{}" \;
 
 drupal-permissions-cap:
 	PERMISSIONS_USER=deploy PERMISSIONS_GROUP=deploy PERMISSIONS_WEBSERVER=www-data make drupal-permissions
