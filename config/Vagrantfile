@@ -16,7 +16,11 @@ is_windows = (RbConfig::CONFIG['host_os'] =~ /mswin|mingw|cygwin/)
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.hostname = vconfig['vagrant_hostname']
-  config.vm.network :private_network, ip: vconfig['vagrant_ip']
+  if vconfig['vagrant_ip'] == "0.0.0.0" && Vagrant.has_plugin?("vagrant-auto_network")
+    config.vm.network :private_network, :ip => vconfig['vagrant_ip'], :auto_network => true
+  else
+    config.vm.network :private_network, ip: vconfig['vagrant_ip']
+  end
   config.ssh.insert_key = false
   config.ssh.forward_agent = true
 
@@ -25,20 +29,32 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # If hostsupdater plugin is installed, add all servernames as aliases.
   if Vagrant.has_plugin?("vagrant-hostsupdater")
     config.hostsupdater.aliases = []
-    for host in vconfig['apache_vhosts']
-      # Add all the hosts that aren't defined as Ansible vars.
-      unless host['servername'].include? "{{"
-        config.hostsupdater.aliases.push(host['servername'])
-      end
-    end
-  end
 
-  if vconfig.include?('vagrant_forwarded_ports')
-    for forwarded_port in vconfig['vagrant_forwarded_ports']
-      config.vm.network "forwarded_port",
-        guest: forwarded_port['guest'],
-        host: forwarded_port['host'],
-        protocol: forwarded_port['protocol']
+    # Add in the drupal_domain if it is different from vagrant_hostname.
+    if vconfig['drupal_domain'] != config.vm.hostname
+      config.hostsupdater.aliases.push(vconfig['drupal_domain'])
+    end
+
+    # Add hosts for all server names and aliases that are not the same
+    # as vagrant_hostname.
+    for host in vconfig['apache_vhosts']
+      # Vhost server name.
+      servername = host['servername'].sub('{{ drupal_domain }}', vconfig['drupal_domain'])
+      if servername != config.vm.hostname && !config.hostsupdater.aliases.index(servername)
+        config.hostsupdater.aliases.push(servername)
+      end
+
+      # Vhost server aliases.
+      # Can be a space deliminated list of host names, so we have to iterate over them.
+      if host['serveralias'] && !host['serveralias'].empty?
+        serveraliases = host['serveralias'].gsub('{{ drupal_domain }}', vconfig['drupal_domain'])
+        server_alias_array = serveraliases.split(' ')
+        for server_alias in server_alias_array
+          if server_alias != config.vm.hostname && !config.hostsupdater.aliases.index(server_alias)
+            config.hostsupdater.aliases.push(server_alias)
+          end
+        end
+      end
     end
   end
 

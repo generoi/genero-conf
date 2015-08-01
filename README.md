@@ -193,6 +193,16 @@ client such as a browserstack session.
 
 _Unfortunately weinre does not display the CSS of media queries._
 
+##### VM services
+
+```
+Adminer    http://{{ vagrant_hostname  }}/adminer
+MailHog    http://{{ vagrant_hostname  }}:8025/
+PimpMyLog  http://pimpmylog.{{ vagrant_hostname }}/
+Solr       http://{{ vagrant_hostname  }}:8983/solr/
+XHProf     http://xhprof.{{ vagrant_hostname  }}/
+```
+
 #### Deploy
 
 ```sh

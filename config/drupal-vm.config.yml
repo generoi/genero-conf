@@ -9,7 +9,7 @@ vagrant_user: vagrant
 # machine name, and IP address for each instance.
 vagrant_hostname: <project>.dev
 vagrant_machine_name: <project>dev
-vagrant_ip: 192.168.88.87
+vagrant_ip: 0.0.0.0
 
 # A list of synced folders, with the keys 'local_path', 'destination', 'id', and
 # a 'type' of [nfs|rsync|smb] (leave empty for slow native shares). See
@@ -54,17 +54,41 @@ drupal_mysql_user: drupal
 drupal_mysql_password: drupal
 drupal_mysql_database: drupal
 
+# Cron jobs are added to the root user's crontab. Keys include name (required),
+# minute, hour, day, weekday, month, job (required), and state.
+drupalvm_cron_jobs: []
+# - {
+#   name: "Drupal Cron",
+#   minute: "*/30",
+#   job: "drush -r {{ drupal_core_path }} core-cron"
+# }
+
 # Drupal VM automatically creates a drush alias file in your ~/.drush folder if
 # this variable is 'true'.
 configure_local_drush_aliases: true
 
 # Apache VirtualHosts. Add one for each site you are running inside the VM. For
 # multisite deployments, you can point multiple servernames at one documentroot.
-# @TODO jinja variables arent parsed in Vagrantfile.
 apache_vhosts:
-  - { servername: "<project>.dev", documentroot: "{{ drupal_core_path }}" }
-  - { servername: "xhprof.<project>.dev", documentroot: "/usr/share/php/xhprof_html" }
-  - { servername: "pimpmylog.<project>.dev", documentroot: "/usr/share/php/pimpmylog" }
+  - { servername: "{{ drupal_domain }}", serveralias: "www.{{ drupal_domain }}", documentroot: "{{ drupal_core_path }}" }
+  - { servername: "xhprof.{{ drupal_domain }}.dev", documentroot: "/usr/share/php/xhprof_html" }
+  - { servername: "pimpmylog.{{ drupal_domain }}.dev", documentroot: "/usr/share/php/pimpmylog" }
+apache_remove_default_vhost: true
+apache_mods_enabled:
+  - expires.load
+  - ssl.load
+  - rewrite.load
+
+# Enable SSL Support on the Drupal site vhosts.
+# See https://github.com/geerlingguy/ansible-role-apache for additional options.
+# Update the file paths below if you are using a custom SSL certificate.
+apache_vhosts_ssl:
+  - servername: "{{ drupal_domain }}",
+    serveralias: "www.{{ drupal_domain }}",
+    documentroot: "{{ drupal_core_path }}",
+    certificate_file: "/etc/ssl/certs/ssl-cert-snakeoil.pem",
+    certificate_key_file: "/etc/ssl/private/ssl-cert-snakeoil.key",
+
 
 # MySQL Databases and users. If build_from_makefile is true, first database will
 # be used for the makefile-built site.
@@ -83,7 +107,7 @@ mysql_users:
 installed_extras:
   - adminer
   - mailhog
-  # - memcached
+  - memcached
   - pimpmylog
   # - selenium
   # - solr
@@ -95,8 +119,6 @@ installed_extras:
 extra_packages: []
 
 # You can configure almost anything else on the server in the rest of this file.
-mysql_root_password: root
-
 extra_security_enabled: false
 
 drush_version: 6.x
@@ -135,15 +157,16 @@ composer_home_path: '/home/vagrant/.composer'
 #   - { name: phpunit/phpunit, release: '@stable' }
 
 # MySQL Configuration.
+mysql_root_password: root
 mysql_slow_query_log_enabled: true
 mysql_slow_query_time: 2
 adminer_add_apache_config: true
 
 # Varnish Configuration.
-# varnish_listen_port: "81"
-# varnish_default_vcl_template_path: templates/drupalvm.vcl.j2
-# varnish_default_backend_host: "127.0.0.1"
-# varnish_default_backend_port: "80"
+varnish_listen_port: "81"
+varnish_default_vcl_template_path: templates/drupalvm.vcl.j2
+varnish_default_backend_host: "127.0.0.1"
+varnish_default_backend_port: "80"
 
 # Pimp my Log settings.
 pimpmylog_install_dir: /usr/share/php/pimpmylog
@@ -160,9 +183,9 @@ php_xdebug_idekey: sublime.xdebug
 php_xdebug_max_nesting_level: 255
 
 # Solr Configuration (if enabled above).
-# solr_version: "4.10.4"
-# solr_xms: "64M"
-# solr_xmx: "128M"
+solr_version: "4.10.4"
+solr_xms: "64M"
+solr_xmx: "128M"
 
 # Selenium configuration
-# selenium_version: 2.46.0
+selenium_version: 2.46.0

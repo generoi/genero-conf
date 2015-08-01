@@ -49,8 +49,9 @@ install-dep-osx: BREW-exists
 	which vagrant > /dev/null || brew install Caskroom/cask/vagrant Caskroom/cask/virtualbox
 	which composer > /dev/null || (curl -sS https://getcomposer.org/installer | php; mv composer.phar /usr/local/bin/composer)
 	which drush > /dev/null || composer global require drush/drush:6.*
-	vagrant list-commands | grep "gatling-rsync-auto" > /dev/null || vagrant plugin install vagrant-gatling-rsync
-	vagrant list-commands | grep "hostsupdater" > /dev/null || vagrant plugin install vagrant-hostsupdater
+	vagrant plugin list | grep "vagrant-gatling-rsync" > /dev/null || vagrant plugin install vagrant-gatling-rsync
+	vagrant plugin list | grep "vagrant-auto_network" > /dev/null || vagrant plugin install vagrant-auto_network
+	vagrant plugin list | grep "vagrant-hostsupdater" > /dev/null || vagrant plugin install vagrant-hostsupdater
 
 info:
 	@echo

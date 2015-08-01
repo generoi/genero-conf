@@ -26,8 +26,6 @@ vm-install: vm-check
 	vagrant status | grep -qe 'running' && (vagrant ssh -c 'sudo service mysql restart; sudo service apache restart') || true
 	@echo -e "${CSTART} Start and provision the vagrant environment ${CEND}"
 	vagrant up --provision && vagrant provision
-	@echo -e "${CSTART} Disable default apache vhost ${CEND}"
-	vagrant ssh -c 'sudo a2dissite 000-default; sudo service apache2 reload'
 	@echo -e "${CSTART} Configure settings.local.php ${CEND}"
 	vagrant ssh -c '\
 		chmod 775 ${DRUPAL_ROOT}/sites/default;\
@@ -47,10 +45,6 @@ vm-install: vm-check
 	vagrant ssh -c 'mkdir -p ~/.ssh; chmod 0700 ~/.ssh; touch ~/.ssh/known_hosts; chmod 0600 ~/.ssh/known_hosts;'
 	@echo -e "${CSTART} Add the fingerprint for some common servers: ${FINGERPRINTS} ${CEND}"
 	vagrant ssh -c 'for s in ${FINGERPRINTS}; do key="$$(ssh-keyscan $$s)"; grep -qe "$$key" ~/.ssh/known_hosts || echo "$$key" >> ~/.ssh/known_hosts; done'
-	@echo -e "${CSTART} Add /etc/host entries ${CEND}"
-	@for host in $$(awk '/servername:/ { gsub("[\",]", ""); print $$4 }' ${DRUPALVM_CONFIG}); do \
-		echo -e "${VAGRANT_IP}\t$$host"; grep -qe "${VAGRANT_IP}\s*$$host" /etc/hosts || sudo sh -c "echo \"${VAGRANT_IP}\t$$host\" >> /etc/hosts"; \
-	done
 	@echo
 	@echo -e "\n-----------------------------------------------------------------------------------"
 	@echo -e "NOTE: To push your public key to the production environment you can: make production-ssh-copy-id"
