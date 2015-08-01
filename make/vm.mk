@@ -23,7 +23,7 @@ vm-check: ANSIBLE-exists VAGRANT-exists SED-version LOCAL-env
 
 vm-install: vm-check
 	@echo -e "${CSTART} Restart services if vagrant is already running ${CEND}"
-	vagrant status | grep -qe 'running' && (vagrant ssh -c 'sudo service mysql restart; sudo service apache restart')
+	vagrant status | grep -qe 'running' && (vagrant ssh -c 'sudo service mysql restart; sudo service apache restart') || true
 	@echo -e "${CSTART} Start and provision the vagrant environment ${CEND}"
 	vagrant up --provision && vagrant provision
 	@echo -e "${CSTART} Disable default apache vhost ${CEND}"
