@@ -27,7 +27,7 @@ vm-install: vm-check
 	@echo -e "${CSTART} Start and provision the vagrant environment ${CEND}"
 	vagrant up --provision && vagrant provision
 	@echo -e "${CSTART} Disable default apache vhost ${CEND}"
-	vagrant ssh -c 'sudo a2dissite 000-default; sudo service apache reload'
+	vagrant ssh -c 'sudo a2dissite 000-default; sudo service apache2 reload'
 	@echo -e "${CSTART} Configure settings.local.php ${CEND}"
 	vagrant ssh -c '\
 		chmod 775 ${DRUPAL_ROOT}/sites/default;\
