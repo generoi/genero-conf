@@ -45,6 +45,12 @@ vm-install: vm-check
 	vagrant ssh -c 'mkdir -p ~/.ssh; chmod 0700 ~/.ssh; touch ~/.ssh/known_hosts; chmod 0600 ~/.ssh/known_hosts;'
 	@echo -e "${CSTART} Add the fingerprint for some common servers: ${FINGERPRINTS} ${CEND}"
 	vagrant ssh -c 'for s in ${FINGERPRINTS}; do key="$$(ssh-keyscan $$s)"; grep -qe "$$key" ~/.ssh/known_hosts || echo "$$key" >> ~/.ssh/known_hosts; done'
+	@echo -e "${CSTART} Add /etc/host entries ${CEND}"
+	@for host in $$(awk '/servername:/ { gsub("[\",]", ""); print $$4 }' ${DRUPALVM_CONFIG}); do \
+		echo -e "${VAGRANT_IP}\t$$host"; grep -qe "${VAGRANT_IP}\s*$$host" /etc/hosts || sudo sh -c "echo \"${VAGRANT_IP}\t$$host\" >> /etc/hosts"; \
+	done
+	@echo -e "${VAGRANT_IP}\t${VAGRANT_HOST}"; grep -qe "${VAGRANT_IP}\s*${VAGRANT_HOST}" /etc/hosts || sudo sh -c "echo \"${VAGRANT_IP}\t${VAGRANT_HOST}\" >> /etc/hosts"
+	@echo -e "${VAGRANT_IP}\twww.${VAGRANT_HOST}"; grep -qe "${VAGRANT_IP}\s*www.${VAGRANT_HOST}" /etc/hosts || sudo sh -c "echo \"${VAGRANT_IP}\twww.${VAGRANT_HOST}\" >> /etc/hosts"
 	@echo
 	@echo -e "\n-----------------------------------------------------------------------------------"
 	@echo -e "NOTE: To push your public key to the production environment you can: make production-ssh-copy-id"
