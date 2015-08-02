@@ -367,11 +367,10 @@ Common issues
   agent running with your key.
 
 - If drush can't find an alias, check `drush site-alias`, if it's not there it
-  most likely means you don't have the sites/all/drush/aliases.drushrc.php file.
+  most likely means you don't have the `sites/all/drush/aliases.drushrc.php`
+  file.
 
-- Cannot forward SSH port.
-
-  > Vagrant cannot forward the specified ports on this VM, since they
+- > Vagrant cannot forward the specified ports on this VM, since they
   > would collide with some other application that is already listening
   > on these ports. The forwarded port to 2222 is already in use
   > on the host machine.
@@ -380,11 +379,11 @@ Common issues
   a port that a now-running VM is using. Simply run `vagrant halt` followed by
   `vagrant up`.
 
-- Host key verification failed when staging is trying to communicate with production.
+- > Host key verification failed when staging is trying to communicate with production.
 
-  ssh deploy@minasanor 'ssh-keygen -R <production>'
+  `ssh deploy@minasanor 'ssh-keygen -R <production>'`
 
-- Keep getting random `Error: Call to undefined function ctools_include()` etc.
+- > Keep getting random `Error: Call to undefined function ctools_include()` etc.
 
   Is memcached used, it might have failed somehow, restart it with:
   `drush @dev ssh 'sudo service memcached restart`
