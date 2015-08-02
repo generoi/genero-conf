@@ -23,6 +23,7 @@ backup
 # Vagrant
 .vagrant
 vm
+vagrant-ssh-config
 
 # Sublime files
 *.sublime-project
