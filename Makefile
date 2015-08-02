@@ -9,7 +9,7 @@ PROJECT ?= <project>
 HOST    ?= <host>
 THEME   ?= <theme>
 
-SED_REPLACE := -e 's@<project>@$(PROJECT)@' -e 's@<theme>@$(THEME)@' -e 's@<host>@$(HOST)@'
+SED_REPLACE := -e 's@<project>@$(PROJECT)@g' -e 's@<theme>@$(THEME)@g' -e 's@<host>@$(HOST)@g'
 
 check: index.php .git
 
