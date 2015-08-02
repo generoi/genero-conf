@@ -383,3 +383,8 @@ Common issues
 - Host key verification failed when staging is trying to communicate with production.
 
   ssh deploy@minasanor 'ssh-keygen -R <production>'
+
+- Keep getting random `Error: Call to undefined function ctools_include()` etc.
+
+  Is memcached used, it might have failed somehow, restart it with:
+  `drush @dev ssh 'sudo service memcached restart`
