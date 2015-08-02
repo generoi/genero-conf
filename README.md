@@ -21,6 +21,7 @@ On OSX you can install them with homebrew using `make install-dep-osx`
 - rsync version 3.1+ (not on osx by default)
 - modern grep (not on osx by default)
 - vagrant-gatling-rsync (for faster folder sync)
+- vagrant-auto_network (for automatic IP designations)
 
 #### Setup
 
@@ -30,6 +31,10 @@ _Note that all of these tasks should run on your local machine._
 
 ```sh
 git clone --recursive git@github.com:generoi/<PROJECT>.git
+
+# Add your key to the authorization agent for connecting to production.
+eval $(ssh-agent -s)
+ssh-add
 
 # Check dependencies and install/update your virtual machine.
 # These tasks are atomic, so you can run them over and over again without
@@ -41,16 +46,9 @@ make install
 # - make vm-install
 # - make dev-install
 # - make staging-ssh-copy-id
+# - make production-ssh-copy-id
 # - make staging-mysql-settings
 # - make info
-
-# Add your key to the authorization agent for connecting to production.
-eval $(ssh-agent -s)
-ssh-add
-
-# If you have access to the production environment from the staging
-# environment, you can use:
-make production-ssh-copy-id
 
 # Import the database from the production environment.
 # NOTE you cannot use @self here, as MySQL isn't installed on your local
@@ -164,7 +162,13 @@ desktop using the [following tutorial](https://developer.chrome.com/devtools/doc
 ##### Update/Install Drupal modules.
 
 As `drush pm-update` and `drush pm-install` run within the VM and rsync is
-one-way, the files created will be one the host only.
+one-way, the files created will be one the host only. So you have two options:
+
+1. Fetch the modules locally with `drush dl foobar`
+2. Let them be resynced to the VM.
+3. Run the updates on the VM using `drush @dev updatedb`
+
+Alternatively
 
 1. Exit the `vagrant gatling-rsync-auto` process if you have it running, this
 might override the new code before you can act.
@@ -355,3 +359,12 @@ Production
 
 5. Probably not done, you should probably update this readme with whatever
    issues you found :)
+
+Common issues
+-------------
+
+- If you're trying to communicate with production, make sure you have an SSH
+  agent running with your key.
+
+- If drush can't find an alias, check `drush site-alias`, if it's not there it
+  most likely means you don't have the sites/all/drush/aliases.drushrc.php file.
