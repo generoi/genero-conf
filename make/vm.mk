@@ -75,7 +75,9 @@ vm-update: vm-check
 
 vm-ssh-copy-id: vm-check
 	@echo -e "${CSTART} Authorize the ${VAGRANT_HOST} RSA fingerprint ${CEND}"
-	ssh -o PasswordAuthentication=no -o ConnectTimeout=5 -i ${HOME}/.vagrant.d/insecure_private_key vagrant@${VAGRANT_HOST} echo ok 2>&1; \
+	vagrant ssh-config --host default | grep -v StrictHostKeyChecking | sed 's/127.0.0.1/${VAGRANT_HOST}/' >| vagrant-ssh-config
+	ssh -F vagrant-ssh-config default echo ok 2>&1; \
+	rm vagrant-ssh-config
 
 # Clean
 ##############################################################################
