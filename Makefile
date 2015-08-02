@@ -31,6 +31,7 @@ symlink: check
 	ln -sf ../../../config/drushrc.php sites/all/drush/drushrc.php
 	ln -sf ../../../$(DIFF_PATH)/drush/policy.drush.inc sites/all/drush/policy.drush.inc
 	ln -sf ../../../$(DIFF_PATH)/drush/sync_enable.drush.inc sites/all/drush/sync_enable.drush.inc
+	ln -sf ../../../../.jshintrc sites/all/themes/$(THEME)/.jshintrc
 
 copy: check
 	sed $(SED_REPLACE) $(DIFF_PATH)/gitignore >| .gitignore
