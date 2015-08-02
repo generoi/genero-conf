@@ -368,3 +368,14 @@ Common issues
 
 - If drush can't find an alias, check `drush site-alias`, if it's not there it
   most likely means you don't have the sites/all/drush/aliases.drushrc.php file.
+
+- Cannot forward SSH port.
+
+> Vagrant cannot forward the specified ports on this VM, since they
+> would collide with some other application that is already listening
+> on these ports. The forwarded port to 2222 is already in use
+> on the host machine.
+
+This is a Vagrant issue that will occur when you have a suspended VM that used
+a port that a now-running VM is using. Simply run `vagrant halt` followed by
+`vagrant up`.
