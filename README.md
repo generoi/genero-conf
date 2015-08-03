@@ -23,6 +23,41 @@ On OSX you can install them with homebrew using `make install-dep-osx`
 - vagrant-gatling-rsync (for faster folder sync)
 - vagrant-auto_network (for automatic IP designations)
 
+**Linux Install Commands.**
+
+```sh
+
+#PHP & Curl (Not 100% which of these are actually necessary)
+apt-get install php5 php5-cli curl libcurl3 libcurl3-dev php5-curl
+
+#Ansible
+sudo apt-get install software-properties-common
+sudo apt-add-repository ppa:ansible/ansible
+sudo apt-get update
+sudo apt-get install ansible
+
+#Vagrant & Virtualbox
+sudo apt-get install virtualbox
+sudo apt-get install vagrant
+sudo apt-get install virtualbox-dkms
+
+#Composer
+curl -sS https://getcomposer.org/installer | php
+mv composer.phar /usr/local/bin/composer
+#Add the following line to source ~/.bashrc
+export PATH="$HOME/.composer/vendor/bin:$PATH"
+source ~/.bashrc
+
+#Drush (using Composer)
+composer global require drush/drush:6.*
+
+#NPM & Bower (for me the make install wouldn't run without them)
+sudo apt-get install npm
+sudo npm install -g bower
+sudo apt-get install nodejs-legacy
+
+```
+
 #### Setup
 
 Fetch the code from github, the files and the latest database from production.
