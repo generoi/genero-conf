@@ -17,7 +17,7 @@ GITHUB_USER  ?= $(shell git config --global github.user)
 GNUPG-exists:    ; @which gpg > /dev/null
 COMPOSER-exists: ; @which composer > /dev/null
 DRUSH-exists:    ; @which drush > /dev/null
-DRUSH-version:   ; @drush --version | grep "6.0" > /dev/null
+DRUSH-version:   ; @drush --version | grep ':\s*6' > /dev/null
 
 # Development (vm)
 ##############################################################################
