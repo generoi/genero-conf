@@ -1,5 +1,3 @@
-SHELL := /bin/bash
-
 # PRODUCTION_HOST ?=
 # STAGING_HOST    ?=
 

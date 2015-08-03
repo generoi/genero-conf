@@ -1,5 +1,3 @@
-SHELL := /bin/bash
-
 WEINRE_HOST ?= -all-
 WEINRE_PORT ?= 9090
 NGROK_PORT ?= 80
@@ -40,15 +38,15 @@ drupal-permissions-cap:
 # If you want to install the dependencies.
 install-dep-osx: BREW-exists
 	@echo -e "${CSTART} Install dependencies ${CEND}"
-	brew install gnu-sed --with-default-names
-	brew install homebrew/dupes/rsync
-	brew install homebrew/dupes/grep
-	which php > /dev/null || brew install homebrew/php/php56
-	which gpg > /dev/null || brew install gnupg
-	which ansible > /dev/null || brew install ansible
-	which vagrant > /dev/null || brew install Caskroom/cask/vagrant Caskroom/cask/virtualbox
-	which composer > /dev/null || (curl -sS https://getcomposer.org/installer | php; mv composer.phar /usr/local/bin/composer)
-	which drush > /dev/null || composer global require drush/drush:6.*
+	$(BREW) install gnu-sed --with-default-names
+	$(BREW) install home$(BREW)/dupes/rsync
+	$(BREW) install home$(BREW)/dupes/grep
+	which php > /dev/null || $(BREW) install homebrew/php/php56
+	which gpg > /dev/null || $(BREW) install gnupg
+	which ansible > /dev/null || $(BREW) install ansible
+	which vagrant > /dev/null || $(BREW) install Caskroom/cask/vagrant Caskroom/cask/virtualbox
+	which composer > /dev/null || (curl -sS https://getcomposer.org/installer | $(PHP); mv composer.phar /usr/local/bin/composer)
+	which drush > /dev/null || $(COMPOSER) global require drush/drush:6.*
 	vagrant plugin list | grep "vagrant-gatling-rsync" > /dev/null || vagrant plugin install vagrant-gatling-rsync
 	vagrant plugin list | grep "vagrant-auto_network" > /dev/null || vagrant plugin install vagrant-auto_network
 	vagrant plugin list | grep "vagrant-hostsupdater" > /dev/null || vagrant plugin install vagrant-hostsupdater

@@ -1,5 +1,3 @@
-SHELL := /bin/bash
-
 DRUPAL_CORE_FILES := CHANGELOG.txt COPYRIGHT.txt INSTALL*.txt LICENSE.txt MAINTAINERS.txt README.txt UPGRADE.txt authorize.php cron.php includes/ index.php install.php misc/ modules/ profiles/ scripts/ themes/ update.php web.config xmlrpc.php
 GIT_SHRINK_BRANCH ?= master
 

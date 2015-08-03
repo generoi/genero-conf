@@ -1,5 +1,3 @@
-SHELL := /bin/bash
-
 DOTFILES_URL ?= https://github.com/generoi/dotfiles.git
 GEMS         ?= capistrano compass bundler
 NODE_VERSION ?= stable
@@ -33,11 +31,11 @@ dev-install: dev-dependencies-install dev-check
 	@echo -e "${CSTART} Create git config ${CEND}"
 	vagrant ssh -c 'echo -e "export GIT_USER_NAME=\"${GIT_USER}\"\nexport GIT_USER_EMAIL=\"${GIT_EMAIL}\"\nexport GITHUB_USER=\"${GITHUB_USER}\"" >| /home/vagrant/.bash/local.sh'
 	@echo -e "${CSTART} Install the repository npm packages ${CEND}"
-	[ -f package.json ] && npm install
+	[ -f package.json ] && $(NPM) install
 	@echo -e "${CSTART} Install the repository bower packages ${CEND}"
-	[ -f bower.json ] && bower install
+	[ -f bower.json ] && $(BOWER) install
 	@echo -e "${CSTART} Install the gem bundles ${CEND}"
-	[ -f Gemfile ] && bundle install
+	[ -f Gemfile ] && $(BUNDLE) install
 	@echo
 	@echo -e "\n-----------------------------------------------------------------------------------"
 	@echo -e "NOTE: Your local git config information (${GIT_USER} <${GIT_EMAIL}>) was added to ~/.bash/local.sh"
@@ -54,4 +52,4 @@ dev-dependencies-install: GNUPG-exists
 	@echo -e "${CSTART} Install Node and NPM: ${NODE_VERSION} ${CEND}"
 	source ~/.nvm/nvm.sh; nvm install ${NODE_VERSION}; nvm alias default ${NODE_VERSION}
 	@echo -e "${CSTART} Install NPM packages: ${NPM_PACKAGES} ${CEND}"
-	source ~/.nvm/nvm.sh; npm install -g ${NPM_PACKAGES}
+	source ~/.nvm/nvm.sh; $(NPM) install -g ${NPM_PACKAGES}

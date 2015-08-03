@@ -1,5 +1,3 @@
-SHELL := /bin/bash
-
 # STAGING_HOST         ?=
 # PRODUCTION_HOST      ?=
 
@@ -43,6 +41,8 @@ vm-install: vm-check
 	vagrant ssh -c 'sudo bash -c "sysctl vm.swappiness=0; grep -qe \"vm.swappiness\" /etc/sysctl.conf || echo \"vm.swappiness = 0\" >> /etc/sysctl.conf"'
 	@echo -e "${CSTART} Make sure ~/.ssh/known_hosts exist ${CEND}"
 	vagrant ssh -c 'mkdir -p ~/.ssh; chmod 0700 ~/.ssh; touch ~/.ssh/known_hosts; chmod 0600 ~/.ssh/known_hosts;'
+	@echo -e "${CSTART} Don't accept ssh sent LANG variables on the VM ${CEND}"
+	vagrant ssh -c "sudo sed -i 's/^\(AcceptEnv LANG LC_\*\)/# \1/' /etc/ssh/sshd_config"
 	@echo -e "${CSTART} Add the fingerprint for some common servers: ${FINGERPRINTS} ${CEND}"
 	vagrant ssh -c 'for s in ${FINGERPRINTS}; do key="$$(ssh-keyscan $$s)"; grep -qe "$$key" ~/.ssh/known_hosts || echo "$$key" >> ~/.ssh/known_hosts; done'
 	make vm-hosts

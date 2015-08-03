@@ -1,5 +1,3 @@
-SHELL := /bin/bash
-
 # STAGING_DB_NAME ?=
 # STAGING_DB_USER ?=
 # STAGING_DB_PASS ?=
