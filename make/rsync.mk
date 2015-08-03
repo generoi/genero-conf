@@ -1,5 +1,3 @@
-SHELL := /bin/bash
-
 RSYNC_PULL_OPTS := --no-perms --no-owner --no-group --verbose --update --recursive --exclude Makefile --exclude .vagrant/ --exclude Vagrantfile --exclude .git --exclude tmp --exclude sites/default/files/ --exclude .drush-lock-update
 PULL_CUSTOM     ?= contrib
 

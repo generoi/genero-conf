@@ -1,4 +1,4 @@
-SHELL := /bin/bash
+SHELL := /usr/bin/env bash
 
 # The remote environment hosts.
 STAGING_HOST    ?= minasanor.genero.fi
