@@ -79,6 +79,11 @@ vm-ssh-copy-id: vm-check
 	ssh -F vagrant-ssh-config default echo ok 2>&1; \
 	rm vagrant-ssh-config
 
+vm-destroy:
+	vagrant destroy -f
+
+vm-rebuild: vm-check vm-destroy vm-update vm-install vm-ssh-copy-id staging-ssh-copy-id production-ssh-copy-id
+
 # Clean
 ##############################################################################
 
