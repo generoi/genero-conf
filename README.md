@@ -52,7 +52,7 @@ sudo apt-get install virtualbox-dkms
 
 # Composer
 curl -sS https://getcomposer.org/installer | php
-mv composer.phar /usr/local/bin/composer
+sudo mv composer.phar /usr/local/bin/composer
 # Add the following line to ~/.bashrc
 export PATH="$HOME/.composer/vendor/bin:$PATH"
 source ~/.bashrc
