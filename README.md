@@ -11,6 +11,7 @@ Development environment
 
 On OSX you can install them with homebrew using `make install-dep-osx`
 
+- Git
 - PHP
 - Ansible
 - Vagrant (with virtualbox)
@@ -26,36 +27,38 @@ On OSX you can install them with homebrew using `make install-dep-osx`
 **Linux Install Commands.**
 
 ```sh
+# Git
+sudo apt-get install git
+git config --global user.name "Your Name"
+git config --global user.email "youremail@domain.com"
 
-#PHP & Curl (Not 100% which of these are actually necessary)
-apt-get install php5 php5-cli curl libcurl3 libcurl3-dev php5-curl
+# Create a key that you can add to your GitHub account
+ssh-keygen
+cat ~/.ssh/id_rsa.pub
 
-#Ansible
+# PHP & Curl
+sudo apt-get install php5 php5-cli curl libcurl3 libcurl3-dev php5-curl
+
+# Ansible
 sudo apt-get install software-properties-common
 sudo apt-add-repository ppa:ansible/ansible
 sudo apt-get update
 sudo apt-get install ansible
 
-#Vagrant & Virtualbox
+# Vagrant & Virtualbox
 sudo apt-get install virtualbox
 sudo apt-get install vagrant
 sudo apt-get install virtualbox-dkms
 
-#Composer
+# Composer
 curl -sS https://getcomposer.org/installer | php
-mv composer.phar /usr/local/bin/composer
-#Add the following line to source ~/.bashrc
+sudo mv composer.phar /usr/local/bin/composer
+# Add the following line to ~/.bashrc
 export PATH="$HOME/.composer/vendor/bin:$PATH"
 source ~/.bashrc
 
-#Drush (using Composer)
+# Drush (using Composer)
 composer global require drush/drush:6.*
-
-#NPM & Bower (for me the make install wouldn't run without them)
-sudo apt-get install npm
-sudo npm install -g bower
-sudo apt-get install nodejs-legacy
-
 ```
 
 #### Setup
@@ -66,6 +69,9 @@ _Note that all of these tasks should run on your local machine._
 
 ```sh
 git clone --recursive git@github.com:generoi/<PROJECT>.git
+
+# Enter the project folder
+cd <PROJECT>
 
 # Add your key to the authorization agent for connecting to production.
 eval $(ssh-agent -s)
