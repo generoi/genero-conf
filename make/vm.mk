@@ -77,9 +77,7 @@ vm-update: vm-check
 
 vm-ssh-copy-id: vm-check
 	@echo -e "${CSTART} Authorize the ${VAGRANT_HOST} RSA fingerprint ${CEND}"
-	vagrant ssh-config --host default | grep -v StrictHostKeyChecking | sed 's/127.0.0.1/${VAGRANT_HOST}/' >| vagrant-ssh-config
-	ssh -F vagrant-ssh-config default echo ok 2>&1; \
-	rm vagrant-ssh-config
+	ssh-keygen -R ${VAGRANT_HOST}
 
 vm-destroy:
 	vagrant destroy -f
