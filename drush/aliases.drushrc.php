@@ -59,7 +59,15 @@ $aliases['dev'] = $base_options + array(
 );
 // Add the vagrant ssh connection information as long as we're not within the
 // vagrant VM.
-if (!$is_vagrant) {
+if (!$is_vagrant && !$is_staging) {
+  exec("ssh-add -l >/dev/null 2>&1", $output, $exit);
+  switch ($exit) {
+    case "2":
+      drush_set_error(dt('No SSH agent running: eval `ssh-agent -s`')); break;
+    case "1":
+      drush_set_error(dt('The SSH agent has no identities: ssh-add')); break;
+  }
+
   $aliases['dev'] += array(
     'remote-host' => CONF_DEV_URI,
     'remote-user' => CONF_DEV_USER,
