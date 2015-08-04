@@ -70,6 +70,9 @@ _Note that all of these tasks should run on your local machine._
 ```sh
 git clone --recursive git@github.com:generoi/<PROJECT>.git
 
+# Enter the project folder
+cd <PROJECT>
+
 # Add your key to the authorization agent for connecting to production.
 eval $(ssh-agent -s)
 ssh-add
