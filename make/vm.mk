@@ -61,6 +61,8 @@ vm-hosts:
 
 # Fetch and configure the latest drupal-vm
 vm-update: vm-check
+	@echo -e "${CSTART} Update vagrant box ${CEND}"
+	vagrant box update
 	@echo -e "${CSTART} Fetch all submodules ${CEND}"
 	git submodule update --init
 	@mkdir -p vm
