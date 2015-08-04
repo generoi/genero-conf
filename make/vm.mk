@@ -96,6 +96,9 @@ clean-vm:
 	[ -d "vm/.vagrant" ] && rm -r vm/.vagrant || true
 	[ -d "~/VirtualBox\ VMs/${VAGRANT_HOST}" ] && rm -r ~/VirtualBox\ VMs/${VAGRANT_HOST} || true
 
+clean-db:
+	-vagrant ssh -c "mysql -u root -p'root' -e 'DROP DATABASE IF EXISTS drupal; DROP USER drupal;'"
+
 clean-settings:
 	@echo -e "${CSTART} Remove the settings.local.php file ${CEND}"
 	[ -e "sites/default/settings.local.php" ] && rm sites/default/settings.local.php || true
