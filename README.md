@@ -11,6 +11,7 @@ Development environment
 
 On OSX you can install them with homebrew using `make install-dep-osx`
 
+- Git
 - PHP
 - Ansible
 - Vagrant (with virtualbox)
@@ -26,6 +27,15 @@ On OSX you can install them with homebrew using `make install-dep-osx`
 **Linux Install Commands.**
 
 ```sh
+# Git
+sudo apt-get install git
+git config --global user.name "Your Name"
+git config --global user.email "youremail@domain.com"
+
+# Create a key that you can add to your GitHub account
+ssh-keygen
+cat ~/.ssh/id_rsa.pub
+
 # PHP & Curl
 sudo apt-get install php5 php5-cli curl libcurl3 libcurl3-dev php5-curl
 
