@@ -1,4 +1,4 @@
-RSYNC_PULL_OPTS := --no-perms --no-owner --no-group --verbose --update --recursive --exclude Makefile --exclude .vagrant/ --exclude Vagrantfile --exclude .git --exclude tmp --exclude sites/default/files/ --exclude .drush-lock-update
+RSYNC_PULL_OPTS := --no-perms --no-owner --no-group --verbose --recursive --exclude Makefile --exclude .vagrant/ --exclude Vagrantfile --exclude .git --exclude tmp --exclude sites/default/files/ --exclude .drush-lock-update
 PULL_CUSTOM     ?= contrib
 
 RSYNC-version:   ; @rsync --version | grep "3.1" > /dev/null
