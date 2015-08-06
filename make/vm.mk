@@ -61,8 +61,6 @@ vm-hosts:
 
 # Fetch and configure the latest drupal-vm
 vm-update: vm-check
-	@echo -e "${CSTART} Update vagrant box ${CEND}"
-	vagrant box update
 	@echo -e "${CSTART} Fetch all submodules ${CEND}"
 	git submodule update --init
 	@mkdir -p vm
@@ -82,7 +80,11 @@ vm-ssh-copy-id: vm-check
 vm-destroy:
 	vagrant destroy -f
 
-vm-rebuild: vm-check clean-settings vm-destroy vm-update vm-install vm-ssh-copy-id info
+vm-rebuild: vm-check clean-settings vm-destroy
+	@echo -e "${CSTART} Update vagrant box ${CEND}"
+	make vm-update
+	vagrant box update
+	make vm-install vm-ssh-copy-id info
 
 # Clean
 ##############################################################################
