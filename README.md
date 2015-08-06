@@ -50,6 +50,8 @@ sudo apt-get install ansible
 # from the linkes below and install with your systems package manager
 # https://www.virtualbox.org/wiki/Linux_Downloads
 # http://www.vagrantup.com/downloads.html
+vagrant plugin install vagrant-gatling-rsync
+vagrant plugin install vagrant-auto_network
 
 # Composer
 curl -sS https://getcomposer.org/installer | php
