@@ -46,9 +46,10 @@ sudo apt-get update
 sudo apt-get install ansible
 
 # Vagrant & Virtualbox
-sudo apt-get install virtualbox
-sudo apt-get install vagrant
-sudo apt-get install virtualbox-dkms
+# For Vagrant 1.7.4 or later and Virtualbox 5 or later, download the installation files
+# from the linkes below and install with your systems package manager
+# https://www.virtualbox.org/wiki/Linux_Downloads
+# http://www.vagrantup.com/downloads.html
 
 # Composer
 curl -sS https://getcomposer.org/installer | php
