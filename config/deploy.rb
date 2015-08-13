@@ -41,6 +41,13 @@ set :varnish_ban_pattern,     "req.url ~ ^/"
 set :assets_compile,          "gulp build --production"
 set :assets_output,           %w[sites/all/themes/<theme>/css sites/all/themes/<theme>/bower_components]
 
+# Slackistrano (change to true)
+set :slack_run_starting,     -> { false }
+set :slack_run_finishing,    -> { false }
+set :slack_run_failed,       -> { false }
+# Add an incoming webhook at https://<team>.slack.com/services/new/incoming-webhook
+# set :slack_webhook, "https://hooks.slack.com/services/XXX/XXX/XXX"
+
 namespace :deploy do
   after :restart, :cache_clear do end
 
