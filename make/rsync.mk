@@ -1,5 +1,5 @@
-RSYNC_PULL_OPTS := --no-perms --no-owner --no-group --verbose --recursive --exclude Makefile --exclude .vagrant/ --exclude Vagrantfile --exclude .git --exclude tmp --exclude sites/default/files/ --exclude .drush-lock-update
-PULL_CUSTOM     ?= contrib
+RSYNC_PULL_OPTS  ?= --no-perms --no-owner --no-group --verbose --recursive --exclude Makefile --exclude .vagrant/ --exclude Vagrantfile --exclude .git --exclude tmp --exclude ${DRUPAL_SITES_DIR}/default/files/ --exclude .drush-lock-update --exclude ${DRUPALVM_DIR}
+PULL_CUSTOM      ?= contrib
 
 RSYNC-version:   ; @rsync --version | grep "3.1" > /dev/null
 
@@ -8,7 +8,7 @@ rsync-check: LOCAL-env RSYNC-version
 rsync: rsync-check
 	@echo -e "${CSTART} Rsync the updated files from the host environment to the VM ${CEND}"
 	vagrant rsync
-	vagrant ssh -c 'cd ${DRUPAL_ROOT}; make drupal-permissions'
+	vagrant ssh -c 'cd ${REPO_ROOT}; make drupal-permissions'
 
 rsync-pull: rsync-check
 	@echo -e "${CSTART} Rsync the updated files from the guest environment to the host ${CEND}"

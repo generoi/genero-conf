@@ -3,8 +3,6 @@
 
 VM_URL               := https://github.com/geerlingguy/drupal-vm/archive/master.tar.gz
 
-DRUPALVM_CONFIG      ?= config/drupal-vm.config.yml
-DRUPALVM_VAGRANTFILE ?= config/Vagrantfile
 FINGERPRINTS         ?= github.com ${STAGING_HOST} ${PRODUCTION_HOST}
 
 VAGRANT_IP   ?= $(shell awk '/vagrant_ip/ { print $$2; }' ${DRUPALVM_CONFIG})
@@ -36,7 +34,7 @@ vm-install: vm-check
 		) || true\
 	'
 	@echo -e "${CSTART} Fetch settings.local.php to localhost ${CEND}"
-	vagrant ssh -c 'cat ${DRUPAL_ROOT}/sites/default/settings.local.php' >| sites/default/settings.local.php
+	vagrant ssh -c 'cat ${DRUPAL_ROOT}/sites/default/settings.local.php' >| ${DRUPAL_SITES_DIR}/default/settings.local.php
 	@echo -e "${CSTART} Change swappiness ${CEND}"
 	vagrant ssh -c 'sudo bash -c "sysctl vm.swappiness=0; grep -qe \"vm.swappiness\" /etc/sysctl.conf || echo \"vm.swappiness = 0\" >> /etc/sysctl.conf"'
 	@echo -e "${CSTART} Make sure ~/.ssh/known_hosts exist ${CEND}"
@@ -62,16 +60,16 @@ vm-hosts:
 # Fetch and configure the latest drupal-vm
 vm-update: vm-check
 	@echo -e "${CSTART} Fetch all submodules ${CEND}"
-	git submodule update --init
-	@mkdir -p vm
-	@echo -e "${CSTART} Fetch the latest drupal-vm and extract it into vendor/vm/ ${CEND}"
-	wget -qO- ${VM_URL} | tar xvz --strip 1 -C vm --exclude='.gitignore'
-	@echo -e "${CSTART} Symlink the configuration file to: vm/config.yml ${CEND}"
-	ln -sf ../${DRUPALVM_CONFIG} vm/config.yml
-	@echo -e "${CSTART} Symlink the modified Vagrantfile to: vm/Vagrantfile ${CEND}"
-	ln -sf ../${DRUPALVM_VAGRANTFILE} vm/Vagrantfile
+	-git submodule update --init
+	@mkdir -p ${DRUPALVM_DIR}
+	@echo -e "${CSTART} Fetch the latest drupal-vm and extract it into ${DRUPALVM_DIR} ${CEND}"
+	wget -qO- ${VM_URL} | tar xvz --strip 1 -C ${DRUPALVM_DIR} --exclude='.gitignore'
+	@echo -e "${CSTART} Symlink the configuration file to: ${DRUPALVM_DIR}/config.yml ${CEND}"
+	ln -sf ${DRUPALVM_DIR_DIFF}${DRUPALVM_CONFIG} ${DRUPALVM_DIR}/config.yml
+	@echo -e "${CSTART} Symlink the modified Vagrantfile to: ${DRUPALVM_DIR}/Vagrantfile ${CEND}"
+	ln -sf ${DRUPALVM_DIR_DIFF}${DRUPALVM_VAGRANTFILE} ${DRUPALVM_DIR}/Vagrantfile
 	@echo -e "${CSTART} Fetch required ansible roles ${CEND}"
-	cd vm; sudo ansible-galaxy install -r provisioning/requirements.txt --force
+	cd ${DRUPALVM_DIR}; sudo ansible-galaxy install -r provisioning/requirements.txt --force
 
 vm-ssh-copy-id: vm-check
 	@echo -e "${CSTART} Authorize the ${VAGRANT_HOST} RSA fingerprint ${CEND}"
@@ -95,7 +93,7 @@ clean-vm:
 	@echo -e "${CSTART} Destroy the vagrant machine completely ${CEND}"
 	vagrant destroy
 	[ -d ".vagrant" ] && rm -r .vagrant
-	[ -d "vm/.vagrant" ] && rm -r vm/.vagrant || true
+	[ -d "${DRUPALVM_DIR}/.vagrant" ] && rm -r ${DRUPALVM_DIR}/.vagrant || true
 	[ -d "~/VirtualBox\ VMs/${VAGRANT_HOST}" ] && rm -r ~/VirtualBox\ VMs/${VAGRANT_HOST} || true
 
 clean-db:

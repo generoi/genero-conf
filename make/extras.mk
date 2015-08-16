@@ -16,21 +16,21 @@ ngrok:
 
 drupal-permissions:
 	@echo -e "${CSTART} Make sure the file permissions are correct ${CEND}"
-	[ -f sites/default/settings.php ]
-	sudo chmod --changes 755 .
-	sudo chown --changes ${PERMISSIONS_USER}:${PERMISSIONS_GROUP} .
-	find . \( -not -user ${PERMISSIONS_USER} -o -not -group ${PERMISSIONS_USER} \) -not -path "./sites/default/files*" -exec sudo chown -v ${PERMISSIONS_USER}:${PERMISSIONS_GROUP} "{}" \;
-	find . -type f -not -path "./sites/default/files*" -not -perm 644 -exec sudo chmod -v 644 "{}" \;
-	find . -type d -not -path "./sites/default/files*" -not -perm 755 -exec sudo chmod -v 755 "{}" \;
-	mkdir -pv sites/default/files
-	sudo chown --changes ${PERMISSIONS_USER}:${PERMISSIONS_WEBSERVER} sites/default/files
-	sudo chmod 2775 --changes sites/default/files
-	sudo chown --changes ${PERMISSIONS_USER}:${PERMISSIONS_GROUP} sites/default/settings.*php
-	sudo chmod 644 --changes sites/default/settings.*php
-	find sites/default/files/ \( -not -user ${PERMISSIONS_USER} -o -not -group ${PERMISSIONS_WEBSERVER} \) -exec sudo chown ${PERMISSIONS_USER}:${PERMISSIONS_WEBSERVER} "{}" \;
-	find sites/default/files/ -not -name '.htaccess' -type f -not -perm 0664 -exec sudo chmod -v 0664 "{}" \;
-	find sites/default/files/ -type d -not -perm 2775 -exec sudo chmod -v 2775 "{}" \;
-	find sites/default/files/ -name '.htaccess' -type f -not -perm 0444 -exec sudo chmod -v 0444 "{}" \;
+	[ -f ${DRUPAL_DIR}/sites/default/settings.php ]
+	sudo chmod --changes 755 ${DRUPAL_DIR}
+	sudo chown --changes ${PERMISSIONS_USER}:${PERMISSIONS_GROUP} ${DRUPAL_DIR}
+	find ${DRUPAL_DIR} \( -not -user ${PERMISSIONS_USER} -o -not -group ${PERMISSIONS_USER} \) -not -path "${DRUPAL_DIR}/sites/default/files*" -exec sudo chown -v ${PERMISSIONS_USER}:${PERMISSIONS_GROUP} "{}" \;
+	find ${DRUPAL_DIR} -type f -not -path "${DRUPAL_DIR}/sites/default/files*" -not -perm 644 -exec sudo chmod -v 644 "{}" \;
+	find ${DRUPAL_DIR} -type d -not -path "${DRUPAL_DIR}/sites/default/files*" -not -perm 755 -exec sudo chmod -v 755 "{}" \;
+	mkdir -pv ${DRUPAL_DIR}/sites/default/files
+	sudo chown --changes ${PERMISSIONS_USER}:${PERMISSIONS_WEBSERVER} ${DRUPAL_DIR}/sites/default/files
+	sudo chmod 2775 --changes ${DRUPAL_DIR}/sites/default/files
+	sudo chown --changes ${PERMISSIONS_USER}:${PERMISSIONS_GROUP} ${DRUPAL_DIR}/sites/default/settings.*php
+	sudo chmod 644 --changes ${DRUPAL_DIR}/sites/default/settings.*php
+	find ${DRUPAL_DIR}/sites/default/files/ \( -not -user ${PERMISSIONS_USER} -o -not -group ${PERMISSIONS_WEBSERVER} \) -exec sudo chown ${PERMISSIONS_USER}:${PERMISSIONS_WEBSERVER} "{}" \;
+	find ${DRUPAL_DIR}/sites/default/files/ -not -name '.htaccess' -type f -not -perm 0664 -exec sudo chmod -v 0664 "{}" \;
+	find ${DRUPAL_DIR}/sites/default/files/ -type d -not -perm 2775 -exec sudo chmod -v 2775 "{}" \;
+	find ${DRUPAL_DIR}/sites/default/files/ -name '.htaccess' -type f -not -perm 0444 -exec sudo chmod -v 0444 "{}" \;
 
 drupal-permissions-cap:
 	PERMISSIONS_USER=deploy PERMISSIONS_GROUP=deploy PERMISSIONS_WEBSERVER=www-data make drupal-permissions
