@@ -119,7 +119,9 @@ installed_extras:
   - xdebug
   - xhprof
 
-# Add any extra packages you'd like to install.
+# Add any extra apt or yum packages. Use the apt or yum package name to
+# indicate which package you'd like to install. E.g. the unzip apt package is
+# used by Drush to unzip libraries downloaded by Drush make files.
 extra_packages: []
 
 # You can configure almost anything else on the server in the rest of this file.
@@ -127,6 +129,7 @@ extra_security_enabled: false
 
 drush_version: 6.6.0
 drush_keep_updated: true
+drush_composer_cli_options: "--prefer-dist --no-interaction"
 
 firewall_allowed_tcp_ports:
   - "22"
@@ -164,6 +167,7 @@ composer_home_path: '/home/vagrant/.composer'
 mysql_root_password: root
 mysql_slow_query_log_enabled: true
 mysql_slow_query_time: 2
+mysql_wait_timeout: 300
 adminer_add_apache_config: true
 
 # Varnish Configuration.
@@ -184,7 +188,7 @@ php_xdebug_remote_enable: 1
 php_xdebug_remote_connect_back: 1
 # Use PHPSTORM for PHPStorm, sublime.xdebug for Sublime Text.
 php_xdebug_idekey: sublime.xdebug
-php_xdebug_max_nesting_level: 255
+php_xdebug_max_nesting_level: 256
 
 # Solr Configuration (if enabled above).
 solr_version: "4.10.4"
