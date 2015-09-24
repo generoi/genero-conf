@@ -57,9 +57,8 @@ $aliases['dev'] = $base_options + array(
     ),
   ),
 );
-// Add the vagrant ssh connection information as long as we're not within the
-// vagrant VM.
-if (!$is_vagrant && !$is_staging) {
+// Add the vagrant ssh connection if we're on the local machine
+if ($is_local) {
   exec("ssh-add -l >/dev/null 2>&1", $output, $exit);
   switch ($exit) {
     case "2":

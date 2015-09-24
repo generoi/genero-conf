@@ -19,6 +19,8 @@ exec("hostname", $output);
 $is_staging = ($output[0] == 'minasanor');
 exec("whoami", $output);
 $is_vagrant = ($output[0] == 'vagrant');
+$is_production = ($output[0] == 'deploy');
+$is_local = !$is_staging && !$is_vagrant && !$is_production;
 
 # Tables to exclude data from during sql sync/dump
 $structure_tables = array(
