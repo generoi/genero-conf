@@ -19,7 +19,7 @@ CEND := $(shell echo -e "...\033[0m")
 
 REPO_ROOT        ?= /var/www/drupal
 DRUPAL_DIR       ?= .
-DRUPAL_ROOT      ?= ${DRUPAL_ROOT}
+DRUPAL_ROOT      ?= ${REPO_ROOT}
 DRUPAL_SITES_DIR ?= sites
 
 DRUPALVM_DIR         ?= vm
