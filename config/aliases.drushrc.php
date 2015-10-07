@@ -15,11 +15,11 @@ define('CONF_PRODUCTION_HOST', '<host>');
 define('CONF_PRODUCTION_USER', 'deploy');
 define('CONF_ADMIN_PASSWORD', 'admin');
 
-exec("hostname", $output);
-$is_staging = ($output[0] == 'minasanor');
-exec("whoami", $output);
-$is_vagrant = ($output[0] == 'vagrant');
-$is_production = ($output[0] == 'deploy');
+exec("hostname", $hostname);
+$is_staging = ($hostname[0] == 'minasanor');
+exec("whoami", $whoami);
+$is_vagrant = ($whoami[0] == 'vagrant');
+$is_production = ($whoami[0] == 'deploy');
 $is_local = !$is_staging && !$is_vagrant && !$is_production;
 
 # Tables to exclude data from during sql sync/dump
