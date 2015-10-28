@@ -67,7 +67,7 @@ vm-update: vm-check
 	@echo -e "${CSTART} Symlink the modified Vagrantfile to: ${DRUPALVM_DIR}/Vagrantfile ${CEND}"
 	ln -sf ${DRUPALVM_DIR_DIFF}${DRUPALVM_VAGRANTFILE} ${DRUPALVM_DIR}/Vagrantfile
 	@echo -e "${CSTART} Fetch required ansible roles ${CEND}"
-	cd ${DRUPALVM_DIR}; sudo ansible-galaxy install -r provisioning/requirements.txt --force
+	cd ${DRUPALVM_DIR}; sudo ansible-galaxy install -r provisioning/requirements.yml --force
 
 vm-ssh-copy-id: vm-check
 	@echo -e "${CSTART} Authorize the ${VAGRANT_HOST} RSA fingerprint ${CEND}"
