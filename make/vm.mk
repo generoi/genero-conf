@@ -1,7 +1,7 @@
 # STAGING_HOST         ?=
 # PRODUCTION_HOST      ?=
 
-VM_URL               := https://github.com/geerlingguy/drupal-vm/archive/master.tar.gz
+VM_URL               := https://github.com/geerlingguy/drupal-vm/archive/2.1.2.tar.gz
 
 FINGERPRINTS         ?= github.com ${STAGING_HOST} ${PRODUCTION_HOST}
 
