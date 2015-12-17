@@ -72,6 +72,7 @@ vm-update: vm-check
 vm-ssh-copy-id: vm-check
 	@echo -e "${CSTART} Authorize the ${VAGRANT_HOST} RSA fingerprint ${CEND}"
 	ssh-keygen -R ${VAGRANT_HOST}
+	ssh-keyscan -H ${VAGRANT_HOST} >> ~/.ssh/known_hosts
 
 vm-destroy:
 	vagrant destroy -f
