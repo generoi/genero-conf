@@ -26,19 +26,21 @@ vagrant_synced_folders:
     rsync_args: [
       "--verbose", "--archive", "--delete",
       "--chmod=Du=rwx,Dgo=rx,Fu=rw,Fgo=r", # 644 for files, 755 for directories
-      "--numeric-ids", # performance tuning
       "--owner", "--group", # required for the following command
-      "--usermap=*:900", "--groupmap=*:900", # chown everything to vagrant:vagrant
+      "--usermap=*:vagrant", "--groupmap=*:vagrant", # chown everything to vagrant:vagrant
     ]
 
 # Memory and CPU to use for this VM.
 vagrant_memory: 1024
 vagrant_cpus: 2
 
+# The web server software to use. Can be either 'apache' or 'nginx'.
+drupalvm_webserver: apache
+
 # Set this to false if you are using a different site deployment strategy and
 # would like to configure 'vagrant_synced_folders' and 'apache_vhosts' manually.
 build_makefile: false
-# drush_makefile_path: /vagrant/drupal.make.yml
+drush_makefile_path: /vagrant/drupal.make.yml
 
 # Set this to false if you don't need to install drupal (using the drupal_*
 # settings below), but instead copy down a database (e.g. using drush sql-sync).
@@ -48,7 +50,7 @@ install_site: true
 # is 'true').
 drupal_major_version: 7
 drupal_core_path: "/var/www/drupal"
-drupal_domain: "<project>.dev"
+drupal_domain: "{{ vagrant_hostname }}"
 drupal_site_name: "<project>"
 drupal_install_profile: standard
 drupal_enable_modules: []
@@ -74,14 +76,30 @@ configure_local_drush_aliases: true
 # Apache VirtualHosts. Add one for each site you are running inside the VM. For
 # multisite deployments, you can point multiple servernames at one documentroot.
 apache_vhosts:
-  - { servername: "<project>.dev", serveralias: "www.<project>.dev", documentroot: "{{ drupal_core_path }}" }
-  - { servername: "xhprof.<project>.dev", documentroot: "/usr/share/php/xhprof_html" }
-  - { servername: "pimpmylog.<project>.dev", documentroot: "/usr/share/php/pimpmylog" }
+  - servername: "{{ drupal_domain }}"
+    documentroot: "{{ drupal_core_path }}"
+    extra_parameters: |
+          ProxyPassMatch ^/(.*\.php(/.*)?)$ "fcgi://127.0.0.1:9000{{ drupal_core_path }}"
+  - servername: "adminer.{{ vagrant_hostname }}"
+    documentroot: "{{ adminer_install_dir }}"
+    extra_parameters: |
+          ProxyPassMatch ^/(.*\.php(/.*)?)$ "fcgi://127.0.0.1:9000{{ adminer_install_dir }}"
+  - servername: "xhprof.{{ vagrant_hostname }}"
+    documentroot: "{{ php_xhprof_html_dir }}"
+    extra_parameters: |
+          ProxyPassMatch ^/(.*\.php(/.*)?)$ "fcgi://127.0.0.1:9000{{ php_xhprof_html_dir }}"
+  - servername: "pimpmylog.{{ vagrant_hostname }}"
+    documentroot: "{{ pimpmylog_install_dir }}"
+    extra_parameters: |
+          ProxyPassMatch ^/(.*\.php(/.*)?)$ "fcgi://127.0.0.1:9000{{ pimpmylog_install_dir }}"
+
 apache_remove_default_vhost: true
 apache_mods_enabled:
   - expires.load
   - ssl.load
   - rewrite.load
+  - proxy.load
+  - proxy_fcgi.load
 
 # Enable SSL Support on the Drupal site vhosts.
 # See https://github.com/geerlingguy/ansible-role-apache for additional options.
@@ -92,7 +110,30 @@ apache_vhosts_ssl:
     documentroot: "{{ drupal_core_path }}"
     certificate_file: "/etc/ssl/certs/ssl-cert-snakeoil.pem"
     certificate_key_file: "/etc/ssl/private/ssl-cert-snakeoil.key"
+    extra_parameters: |
+          ProxyPassMatch ^/(.*\.php(/.*)?)$ "fcgi://127.0.0.1:9000{{ drupal_core_path }}"
 
+# Nginx hosts. Each site will get a server entry using the configuration defined
+# here. Set the 'is_php' property for document roots that contain PHP apps like
+# Drupal.
+nginx_hosts:
+  - server_name: "{{ drupal_domain }}"
+    root: "{{ drupal_core_path }}"
+    is_php: true
+
+  - server_name: "adminer.{{ vagrant_hostname }}"
+    root: "{{ adminer_install_dir }}"
+    is_php: true
+
+  - server_name: "xhprof.{{ vagrant_hostname }}"
+    root: "{{ php_xhprof_html_dir }}"
+    is_php: true
+
+  - server_name: "pimpmylog.{{ vagrant_hostname }}"
+    root: "{{ pimpmylog_install_dir }}"
+    is_php: true
+
+nginx_remove_default_vhost: true
 
 # MySQL Databases and users. If build_from_makefile is true, first database will
 # be used for the makefile-built site.
@@ -110,19 +151,30 @@ mysql_users:
 # Comment out any extra utilities you don't want to install.
 installed_extras:
   - adminer
+  - drupalconsole
   - mailhog
   - memcached
+  - nodejs
   - pimpmylog
+  # - redis
+  - ruby
   # - selenium
   # - solr
-  # - varnish
+  - varnish
   - xdebug
   - xhprof
 
-# Add any extra apt or yum packages. Use the apt or yum package name to
-# indicate which package you'd like to install. E.g. the unzip apt package is
-# used by Drush to unzip libraries downloaded by Drush make files.
-extra_packages: []
+# Add any extra apt or yum packages you would like installed.
+extra_packages:
+  - unzip
+
+# `nodejs` must be in installed_extras for this to work.
+nodejs_version: "0.12"
+nodejs_npm_global_packages: []
+
+# `ruby` must be in installed_extras for this to work.
+ruby_install_gems_user: "{{ vagrant_user }}"
+ruby_install_gems: []
 
 # You can configure almost anything else on the server in the rest of this file.
 extra_security_enabled: false
@@ -146,9 +198,9 @@ firewall_allowed_tcp_ports:
   - "35729" # livereload
 firewall_log_dropped_packets: false
 
-# PHP Configuration. Currently-supported versions: 5.5, 5.6, 7.0 (experimental).
-php_version: "5.5"
-php_memory_limit: "512M"
+# PHP Configuration. Currently-supported versions: 5.5, 5.6, 7.0.
+php_version: "5.6"
+php_memory_limit: "192M"
 php_display_errors: "On"
 php_display_startup_errors: "On"
 php_realpath_cache_size: "1024K"
@@ -158,17 +210,28 @@ php_opcache_memory_consumption: "192"
 php_opcache_max_accelerated_files: 4096
 php_max_input_vars: "4000"
 
+# Drupal VM defaults to using PHP-FPM with either Apache or Nginx. If you wish
+# to instead use Apache + mod_php with an Ubuntu base box, make sure you add
+# libapache2-mod-php5 to `extra_packages` elsewhere in this config file.
+php_enable_php_fpm: true
+php_fpm_listen: "127.0.0.1:9000"
+
 composer_path: /usr/bin/composer
 composer_home_path: '/home/vagrant/.composer'
 # composer_global_packages:
 #   - { name: phpunit/phpunit, release: '@stable' }
+
+# Run specified scripts after VM is provisioned. Path is relative to the
+# `provisioning/playbook.yml` file.
+post_provision_scripts: []
+  # - "../examples/scripts/configure-solr.sh"
 
 # MySQL Configuration.
 mysql_root_password: root
 mysql_slow_query_log_enabled: true
 mysql_slow_query_time: 2
 mysql_wait_timeout: 300
-adminer_add_apache_config: true
+adminer_install_filename: index.php
 
 # Varnish Configuration.
 varnish_listen_port: "81"
