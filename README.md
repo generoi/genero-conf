@@ -5,32 +5,53 @@ Development environment
 > development is done on the host machine, while mysql, apache etc are on the
 > guest machine.
 
-###### Dependencies:
+#### Dependencies:
 
 **These you must install by yourself.**
 
-On OSX you can install them with homebrew using `make install-dep-osx`
+###### OSX
 
-- Git
-- PHP
-- Ansible
-- Vagrant (with virtualbox)
-- Composer
-- Drush version 6.x (recommeded to install it through composer)
-- GnuPG (not on osx by default)
-- GNU sed (not on osx by default)
-- rsync version 3.1+ (not on osx by default)
-- modern grep (not on osx by default)
-- vagrant-gatling-rsync (for faster folder sync)
-- vagrant-auto_network (for automatic IP designations)
+```
+# Install some UNIX tools
+brew tap homebrew/dupes
+brew install coreutils
+brew install gnupg
+brew install gnu-sed --with-default-names
+brew install rsync
+brew install grep --with-default-names
+brew install ssh-copy-id
 
-**Linux Install Commands.**
+# Install additional dependencies
+brew install git
+brew install homebrew/php/php56
+brew install ansible
+brew install Caskroom/cask/vagrant
+
+# Configure git
+git config --global github.user "<username>"
+git config --global user.name "<Your Name>"
+git config --global user.email "<youremail@domain.com>"
+
+# Install Composer
+curl -sS https://getcomposer.org/installer | php
+mv composer.phar /usr/local/bin/composer
+
+# Install Drush
+composer global require drush/drush:6.*
+
+# Install some vagrant plugins
+vagrant plugin install vagrant-gatling-rsync
+vagrant plugin install vagrant-hostsupdater
+```
+
+###### LInux
 
 ```sh
 # Git
 sudo apt-get install git
-git config --global user.name "Your Name"
-git config --global user.email "youremail@domain.com"
+git config --global github.user "<username>"
+git config --global user.name "<Your Name>"
+git config --global user.email "<youremail@domain.com>"
 
 # Create a key that you can add to your GitHub account
 ssh-keygen
@@ -72,27 +93,35 @@ _Note that all of these tasks should run on your local machine._
 
 ```sh
 git clone --recursive git@github.com:generoi/<PROJECT>.git
-
-# Enter the project folder
 cd <PROJECT>
+
+# Setup git hooks
+./lib/git-hooks/install.sh
+
+# Install dependencies
+bundle
+npm install
+bower install
 
 # Add your key to the authorization agent for connecting to production.
 eval $(ssh-agent -s)
 ssh-add
 
-# Check dependencies and install/update your virtual machine.
-# These tasks are atomic, so you can run them over and over again without
-# losing data.
-make install
+# Authenticate the production servers key fingerprint locally.
+# If you run this before `vagrant up` the fingerprint will be copied to the VM as well.
+drush @production status
 
-# This automatically runs the following tasks:
-# - make vm-update
-# - make vm-install
-# - make dev-install
-# - make staging-ssh-copy-id
-# - make production-ssh-copy-id
-# - make staging-mysql-settings
-# - make info
+# Setup the local settings file (pre-configured for the VM)
+cp sites/default/example.settings.local.php sites/default/settings.local.php
+
+# Setup the VM folder
+make vm
+
+# Fetch ansible roles used by Drupal VM
+sudo ansible-galaxy install -r lib/drupal-vm/provisioning/requirements.yml --force
+
+# Build the VM
+vagrant up --provision
 
 # Import the database from the production environment.
 # NOTE you cannot use @self here, as MySQL isn't installed on your local
@@ -170,20 +199,6 @@ XHProf results are at: `http://xhprof.<project>.dev`.
 In case you want to use live reloading on mobile devices, look into using the
 [LiveReload Drupal module](https://www.drupal.org/project/livereload).
 
-##### Switch to remote staging database
-
-This command opens a tunnel on port 3307 to the staging environment port 3306,
-enabling you to use the staging environments database.
-
-```sh
-make staging-mysql-tunnel
-```
-
-Internally this also appends the staging environemnts database information to
-`settings.local.php`, and while running the make command it switches the
-default database settings. Once the connection is closed, it switches back to
-the local database settings.
-
 ##### Share your local webserver on the internet
 
 Maybe you want to test out the site on your mobile, or have someo PM take a
@@ -235,7 +250,7 @@ allows for local testing so you can easily access the VM through their service.
 a remote web inspector, allowing you to inspect a remote
 client such as a browserstack session.
 
-1. Run `make weinre` and keep it running.
+1. Run `vagrant ssh -c 'weinre --boundHost -all- --httpPort 80'` and keep it running.
 2. Open the page you want to inspect and add `?debug` at the end of the URL.
 3. Go to `http://<project>.dev:9090` in your own browser and start inspecting
 
@@ -244,11 +259,11 @@ _Unfortunately weinre does not display the CSS of media queries._
 ##### VM services
 
 ```
-Adminer    http://{{ vagrant_hostname  }}/adminer
-MailHog    http://{{ vagrant_hostname  }}:8025/
+Adminer    http://adminer.{{ vagrant_hostname }}
+MailHog    http://{{ vagrant_hostname }}:8025/
 PimpMyLog  http://pimpmylog.{{ vagrant_hostname }}/
 Solr       http://{{ vagrant_hostname  }}:8983/solr/
-XHProf     http://xhprof.{{ vagrant_hostname  }}/
+XHProf     http://xhprof.{{ vagrant_hostname }}/
 ```
 
 #### Deploy
@@ -363,27 +378,7 @@ Staging environment
 #### Setup
 
 1. Configure the capistrano settings for staging in `config/deploy/staging.rb`
-2. Scaffold the capistrano folder structure by running the following from **your own development machine**.
-
-    ```sh
-    make staging-install
-
-    # This automatically runs the following commands:
-    # - make staging-ssh-copy-id
-    # - cap staging setup
-    # - cap staging deploy
-
-    # Import the database from the production environment.
-    drush sql-sync @production @staging
-
-    # Import the files from the production environment.
-    # NOTE: Drush rsync requires that one of the targets is local, which
-    # is why we need to ssh into staging env first.
-    drush @staging ssh 'drush core-rsync @production:%files @self:%files'
-    ```
-
-3. You might have to edit the `.htaccess` file.
-4. Done.
+2. Todo have a look at this outdated [make task](https://github.com/generoi/genero-conf/blob/4f1bd8bc9da56847e691238b3b5c8228e14617b3/make/staging.mk#L10:L26).
 
 Production
 ----------

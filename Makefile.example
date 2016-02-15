@@ -1,28 +1,19 @@
-SHELL := /usr/bin/env bash
-
-# The remote environment hosts.
-STAGING_HOST    ?= minasanor.genero.fi
-PRODUCTION_HOST ?= <host>
-
-STAGING_ROOT    ?= /var/www/staging/<project>
-
-STAGING_DB_NAME ?= <project>_stage
-STAGING_DB_USER ?= <project>_stage
-STAGING_DB_PASS ?= <project>_stage
-
-include lib/genero-conf/make/shared.mk
-include lib/genero-conf/make/vm.mk
-include lib/genero-conf/make/dev.mk
-include lib/genero-conf/make/staging.mk
-include lib/genero-conf/make/production.mk
-include lib/genero-conf/make/git-helpers.mk
-include lib/genero-conf/make/rsync.mk
-include lib/genero-conf/make/extras.mk
+include lib/genero-conf/Makefile.drupal.mk
 
 all: check
 
 # Sanity checks
-check: vm-check dev-check staging-check rsync-check
+check: DRUSH-exists DRUSH-version SSHAGENT-exists LOCAL-env
 
-# Main task (everything is atomic).
-install: check vm-update vm-install vm-ssh-copy-id dev-install staging-ssh-copy-id production-ssh-copy-id rsync staging-mysql-settings info
+# Virtual Machine -------------------------------------------------------------
+#
+# To scaffold the files for the VM run `make vm`. After that simply provision
+# it.
+
+vm: check
+	cp -r lib/drupal-vm vm
+	ln -sf ../config/drupal-vm.config.yml vm/config.yml
+	ln -sf ../config/Vagrantfile vm/Vagrantfile
+
+vm-clean:
+	rm -rf vm

@@ -1,3 +1,6 @@
+# This is the makefile for setting up or updating a projects configuration files.
+# ------------------------
+
 # Directory of this makefile
 MAKEFILE_PATH := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 # The execution path
@@ -20,6 +23,7 @@ install: submodules symlink copy
 submodules: check
 	-git submodule add git@github.com:generoi/capistrano-tasks.git lib/capistrano
 	-git submodule add git@github.com:generoi/git-hooks.git lib/git-hooks
+	-git submodule add https://github.com/geerlingguy/drupal-vm.git lib/drupal-vm
 
 symlink: check
 	ln -sf $(DIFF_PATH)/jshintrc .jshintrc
