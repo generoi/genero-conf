@@ -30,7 +30,6 @@ symlink: check
 	ln -sf $(DIFF_PATH)/Capfile Capfile
 	ln -sf $(DIFF_PATH)/Vagrantfile Vagrantfile
 	ln -sf ../$(DIFF_PATH)/config/drushrc.php config/drushrc.php
-	ln -sf ../$(DIFF_PATH)/config/Vagrantfile config/Vagrantfile
 	ln -sf ../../../config/aliases.drushrc.php sites/all/drush/aliases.drushrc.php
 	ln -sf ../../../config/drushrc.php sites/all/drush/drushrc.php
 	ln -sf ../../../$(DIFF_PATH)/drush/policy.drush.inc sites/all/drush/policy.drush.inc
