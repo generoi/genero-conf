@@ -1,0 +1,17 @@
+{
+  "name": "generoi/genero-conf",
+  "license": "MIT",
+  "description": "Some shared configurations among sites",
+  "homepage": "https://github.com/generoi/genero-conf",
+  "authors": [
+    {
+      "name": "Oskar Schöldström",
+      "email": "public@oxy.fi"
+    }
+  ],
+  "keywords": [],
+  "support": {
+    "issues": "https://github.com/generoi/genero-conf/issues"
+  },
+  "require": {}
+}
