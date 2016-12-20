@@ -15,5 +15,9 @@ WP_CLI::add_hook('before_ssh', function() {
   $vendor_path = "$project_root/vendor/bin";
   // Additionally add the users globally installed composer binaries.
   $composer_path = '$HOME/.composer/vendor/bin';
-  putenv('WP_CLI_SSH_PRE_CMD=export PATH=' . $vendor_path . ':' . $composer_path . ':$PATH');
+  // Drupal VM installs global composer packages in a custom location, readable
+  // by all the users.
+  $source_profile = '[ -e /etc/profile.d/composer.sh ] && source /etc/profile.d/composer.sh';
+
+  putenv('WP_CLI_SSH_PRE_CMD=' . $source_profile . ';export PATH=' . $vendor_path . ':' . $composer_path . ':$PATH');
 });
