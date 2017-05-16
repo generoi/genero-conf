@@ -1,14 +1,14 @@
 ---
 - name: Define Apache development variable.
   lineinfile:
-    path: /etc/apache2/envvars
+    dest: /etc/apache2/envvars
     regexp: '^export APACHE_ARGUMENTS='
     line: 'export APACHE_ARGUMENTS=-DDEVELOPMENT'
   when: ansible_os_family == 'Debian'
 
 - name: Define Apache development variable.
   lineinfile:
-    path: /etc/sysconfig/httpd
+    dest: /etc/sysconfig/httpd
     regexp: '^OPTIONS='
     line: 'OPTIONS=-DDEVELOPMENT'
   when: ansible_os_family == 'RedHat'
