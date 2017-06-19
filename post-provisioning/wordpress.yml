@@ -1,0 +1,4 @@
+---
+- include: "{{ generoi_conf_path }}/post-provisioning/tasks/apache-env.yml"
+- include: "{{ generoi_conf_path }}/post-provisioning/tasks/dotfiles.yml"
+- include: "{{ generoi_conf_path }}/post-provisioning/tasks/wp-directories.yml"

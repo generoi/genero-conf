@@ -1,0 +1,16 @@
+---
+- name: Ensure uploads directory exists and is writable.
+  file:
+    path: "{{ drupal_core_path }}/app/uploads"
+    state: directory
+    owner: "{{ drupalvm_user }}"
+    group: "{{ drupalvm_webserver_user }}"
+    mode: "u=rwx,g=rwxs,o=rx"
+
+- name: Ensure cache directory exists and is writable.
+  file:
+    path: "{{ drupal_core_path }}/app/cache"
+    state: directory
+    owner: "{{ drupalvm_user }}"
+    group: "{{ drupalvm_webserver_user }}"
+    mode: "u=rwx,g=rwxs,o=rx"

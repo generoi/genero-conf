@@ -1,0 +1,19 @@
+---
+- name: Clone dotfiles.
+  git:
+    repo: https://github.com/generoi/dotfiles.git
+    dest: ~/dotfiles
+    force: yes
+  become: no
+  register: dotfiles_clone_result
+  vars:
+    ansible_ssh_pipelining: true
+
+- name: Install dotfiles.
+  shell: "bash bootstrap.sh"
+  args:
+    chdir: ~/dotfiles
+  become: no
+  vars:
+    ansible_ssh_pipelining: true
+  when: dotfiles_clone_result.changed
