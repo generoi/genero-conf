@@ -1,0 +1,9 @@
+---
+- name: Ensure configuration directory exists and is writable.
+  file:
+    path: "{{ drupal_core_path }}/../config/drupal"
+    state: directory
+    owner: "{{ drupalvm_user }}"
+    group: "{{ drupalvm_webserver_user }}"
+    mode: "u=rwx,g=rwxs,o=rx"
+
