@@ -10,7 +10,7 @@
 - name: Ensure local ~/.ssh/config file exists.
   file:
     path: ~/.ssh/config
-    state: file
+    state: touch
     mode: 0600
   delegate_to: 127.0.0.1
   become: no
