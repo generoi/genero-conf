@@ -6,6 +6,9 @@
     owner: "{{ drupalvm_user }}"
     group: "{{ drupalvm_webserver_user }}"
     mode: "u=rwx,g=rwxs,o=rx"
+  args:
+    warn: no
+  failed_when: false
 
 - name: Ensure cache directory exists and is writable.
   file:
@@ -14,3 +17,6 @@
     owner: "{{ drupalvm_user }}"
     group: "{{ drupalvm_webserver_user }}"
     mode: "u=rwx,g=rwxs,o=rx"
+  args:
+    warn: no
+  failed_when: false
