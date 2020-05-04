@@ -26,38 +26,3 @@
         ForwardAgent yes
   delegate_to: 127.0.0.1
   become: no
-
-- name: Ensure guest ~/.ssh directory exists.
-  file:
-    path: "/home/{{ drupalvm_user }}/.ssh"
-    state: directory
-    owner: "{{ drupalvm_user }}"
-    group: "{{ drupalvm_user }}"
-    mode: 0700
-
-- name: Copy Vagrant insecure_private_key to ~/.ssh/ on guest
-  copy:
-    src: ~/.vagrant.d/insecure_private_key
-    dest: "/home/{{ drupalvm_user }}/.ssh/insecure_private_key"
-    owner: "{{ drupalvm_user }}"
-    group: "{{ drupalvm_user }}"
-    mode: 0600
-
-- name: Ensure guest ~/.ssh/config file exists.
-  file:
-    path: "/home/{{ drupalvm_user }}/.ssh/config"
-    state: touch
-    owner: "{{ drupalvm_user }}"
-    group: "{{ drupalvm_user }}"
-    mode: 0600
-
-- name: Add host entry to guest ~/.ssh/config
-  blockinfile:
-    dest: "/home/{{ drupalvm_user }}/.ssh/config"
-    marker: "# {mark} ANSIBLE MANAGED BLOCK {{ vagrant_machine_name }}"
-    block: |
-      Host {{ vagrant_hostname }}
-        StrictHostKeyChecking no
-        IdentityFile ~/.ssh/insecure_private_key
-        ForwardAgent yes
-  become: no
