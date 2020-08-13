@@ -25,7 +25,7 @@ WP_CLI::add_hook('before_ssh', function() {
     }
 
     // Eg. /var/www/wordpress/web/wp
-    $wp_path = WP_CLI\Utils\parse_ssh_url(WP_CLI::get_runner()->config['ssh'], PHP_URL_PATH);
+    $wp_path = WP_CLI\Utils\parse_ssh_url($config['ssh'], PHP_URL_PATH);
     // Eg. /var/www/wordpress
     $project_root = dirname(dirname($wp_path));
     // Eg. /var/www/wordpress/vendor/bin
